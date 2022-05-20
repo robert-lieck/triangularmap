@@ -1,9 +1,9 @@
-TriangularMap.myclass.MyClass
-=============================
+TriangularMap.tmap.TMap
+=======================
 
-.. currentmodule:: TriangularMap.myclass
+.. currentmodule:: TriangularMap.tmap
 
-.. autoclass:: MyClass
+.. autoclass:: TMap
    :members:
    :undoc-members:
    :special-members:

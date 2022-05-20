@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TriangularMap.tmap &mdash; TriangularMap  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autoclasstoc.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> TriangularMap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_summary.html">API Summary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">TriangularMap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>TriangularMap.tmap</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for TriangularMap.tmap</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  Copyright (c) 2022 Robert Lieck.</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="TMap"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap">[docs]</a><span class="k">class</span> <span class="nc">TMap</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A wrapper around a 1D array that provides access in triangular (or ternary) coordinates. A 1D array of length</span>
+<span class="sd">    N = n * (n + 1) / 2 is mapped to a triangular layout as follows (here with N=21 and n=6):</span>
+
+<span class="sd">                           /\         depth  level</span>
+<span class="sd">                          /0 \            0      6</span>
+<span class="sd">                         /\  /\</span>
+<span class="sd">                        /1 \/ 2\          1      5</span>
+<span class="sd">                       /\  /\  /\</span>
+<span class="sd">                      /3 \/4 \/5 \        2      4</span>
+<span class="sd">                     /\  /\  /\  /\</span>
+<span class="sd">                    /6 \/7 \/8 \/9 \      3      3</span>
+<span class="sd">                   /\  /\  /\  /\  /\</span>
+<span class="sd">                  /10\/11\/12\/13\/14\    4      2</span>
+<span class="sd">                 /\  /\  /\  /\  /\  /\</span>
+<span class="sd">                /15\/16\/17\/18\/19\/20\  5      1</span>
+<span class="sd">               |   |   |   |   |   |   |</span>
+<span class="sd">    start/end: 0   1   2   3   4   5   6</span>
+
+<span class="sd">    Values can be accessed by start and end index (0 &lt;= start &lt; end &lt;= n) as follows:</span>
+<span class="sd">                   (0, 6)</span>
+<span class="sd">                (0, 5) (1, 6)</span>
+<span class="sd">             (0, 4) (1, 5) (2, 6)</span>
+<span class="sd">          (0, 3) (1, 4) (2, 5) (3, 6)</span>
+<span class="sd">       (0, 2) (1, 3) (2, 4) (3, 5) (4, 6)</span>
+<span class="sd">    (0, 1) (1, 2) (2, 3) (3, 4) (4, 5) (5, 6)</span>
+
+<span class="sd">    That is (start, end) is mapped to the linear index depth * (depth + 1) / 2 + end - level, where</span>
+<span class="sd">    depth = n - (end - start) and level = n - depth. Advanced integer index arrays are processed in the same way and</span>
+<span class="sd">    are applied to the underlying array following standard numpy rules (e.g. direct assignment works but otherwise a</span>
+<span class="sd">    copy of the values is returned instead of a view). Additionally, slices by depth or level return views of the</span>
+<span class="sd">    underlying array segment. Slices by start or end index are also supported but internally use advanced indexing, so</span>
+<span class="sd">    they return a copy, not a view.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">flatten_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^(?P&lt;outer_sign&gt;[+-]?)(?P&lt;outer&gt;[sel])(?P&lt;inner_sign&gt;[+-]?)(?P&lt;inner&gt;[sel])$&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TMap.GetSetWrapper"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.GetSetWrapper">[docs]</a>    <span class="k">class</span> <span class="nc">GetSetWrapper</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Wrapper class that delegates __getitem__ and __setitem__ to custom functions&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TMap.GetSetWrapper.__init__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.GetSetWrapper.__init__">[docs]</a>        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">getter</span><span class="p">,</span> <span class="n">setter</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getter</span> <span class="o">=</span> <span class="n">getter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setter</span> <span class="o">=</span> <span class="n">setter</span></div>
+
+<div class="viewcode-block" id="TMap.GetSetWrapper.__getitem__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.GetSetWrapper.__getitem__">[docs]</a>        <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getter</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.GetSetWrapper.__setitem__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.GetSetWrapper.__setitem__">[docs]</a>        <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setter</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="TMap.to_int"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.to_int">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_int</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert i to integer, no matter whether it is a single number or a numpy array.</span>
+<span class="sd">        :param i: number or array of numbers</span>
+<span class="sd">        :return: integer or array of integers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.size1d_from_n"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.size1d_from_n">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">size1d_from_n</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the size N of the underlying 1D array for a given width n of the triangular map: N = n * (n + 1)) / 2.</span>
+<span class="sd">        This function also works with arrays.</span>
+<span class="sd">        :param n: Width (number of entries at the bottom of the map)</span>
+<span class="sd">        :return: Length of underlying 1D array (total number of entries in the map)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">to_int</span><span class="p">((</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.n_from_size1d"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.n_from_size1d">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">n_from_size1d</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate width n of the map given the size N of the underlying 1D array: n = (sqrt(8 * N + 1) - 1) / 2.</span>
+<span class="sd">        Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.</span>
+<span class="sd">        This function also works with arrays.</span>
+<span class="sd">        :param N: size of the underlying 1D array</span>
+<span class="sd">        :return: width of the map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">size1d_from_n</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">!=</span> <span class="n">N</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{N}</span><span class="s2"> is not a valid size for a triangular map (n=</span><span class="si">{n}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">to_int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TMap.__init__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_from_size1d</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span> <span class="o">=</span> <span class="n">linearise_blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sslice</span> <span class="o">=</span> <span class="n">TMap</span><span class="o">.</span><span class="n">GetSetWrapper</span><span class="p">(</span><span class="n">getter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_sslice</span><span class="p">,</span> <span class="n">setter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_sslice</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eslice</span> <span class="o">=</span> <span class="n">TMap</span><span class="o">.</span><span class="n">GetSetWrapper</span><span class="p">(</span><span class="n">getter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eslice</span><span class="p">,</span> <span class="n">setter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_eslice</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sblock</span> <span class="o">=</span> <span class="n">TMap</span><span class="o">.</span><span class="n">GetSetWrapper</span><span class="p">(</span><span class="n">getter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_sblock</span><span class="p">,</span> <span class="n">setter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_sblock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eblock</span> <span class="o">=</span> <span class="n">TMap</span><span class="o">.</span><span class="n">GetSetWrapper</span><span class="p">(</span><span class="n">getter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_eblock</span><span class="p">,</span> <span class="n">setter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_eblock</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap._check"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap._check">[docs]</a>    <span class="k">def</span> <span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether 0 &lt;= start &lt; end &lt; n. This function also works with arrays, in which case all start/end values</span>
+<span class="sd">        have to pass the check. If the check is not passed, an IndexError is raised</span>
+<span class="sd">        :param start: start index or array of indices</span>
+<span class="sd">        :param end: end index or array of indices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">start</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">do_raise</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">do_raise</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">do_raise</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Invalid indices for TMap with size n=</span><span class="si">{self.n}</span><span class="se">\n</span><span class="s2">start: </span><span class="si">{start}</span><span class="se">\n</span><span class="s2">end: </span><span class="si">{end}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.depth"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.depth">[docs]</a>    <span class="k">def</span> <span class="nf">depth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the depth d corresponding to (start, end): d = n - (end - start). This function also works with arrays.</span>
+<span class="sd">        :param start: start index or array of indices</span>
+<span class="sd">        :param end: end index or array of indices</span>
+<span class="sd">        :return: depth or array of depth values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TMap.level"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.level">[docs]</a>    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the level from depth or (start, end). If (start, end) is given, the depth function is used to first</span>
+<span class="sd">        compute the depth. This function also works with arrays.</span>
+<span class="sd">        :param args: either one argument (depth) or two (start, end), which can also be arrays</span>
+<span class="sd">        :return: depth or array of depth values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Expected one positional argument (depth) or two (start, end) to compute level but got &quot;</span>
+                            <span class="n">f</span><span class="s2">&quot;{len(args)}&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">depth</span></div>
+
+<div class="viewcode-block" id="TMap.linear_from_start_end"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.linear_from_start_end">[docs]</a>    <span class="k">def</span> <span class="nf">linear_from_start_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the linear index (in the underlying 1D array) corresponding to a (start, end) pair. This function also</span>
+<span class="sd">        works with arrays.</span>
+<span class="sd">        :param start: start index or array of indices</span>
+<span class="sd">        :param end: end index or array of indices</span>
+<span class="sd">        :return: linear index or array of linear indices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_int</span><span class="p">(</span><span class="n">depth</span> <span class="o">*</span> <span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="n">level</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.__getitem__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the item corresponding to (start, end) or the sub-map corresponding to slice start:end. For items, this</span>
+<span class="sd">        function also works with arrays, resulting in advanced indexing of the underlying 1D array.</span>
+<span class="sd">        :param item: (start, end) or slice</span>
+<span class="sd">        :return: element or sub-map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="c1"># return sub-map</span>
+            <span class="c1"># function to concatenate slices</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cat</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ls</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="c1"># star/end and depth to start with</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">start</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">stop</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">step</span>
+            <span class="n">start_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+            <span class="c1"># get new array of sub-map by concatenating slices</span>
+            <span class="n">arr_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dslice</span><span class="p">(</span><span class="n">d</span><span class="p">)[</span><span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">start_depth</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="p">)]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_depth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">cat</span><span class="p">(</span><span class="n">arr_tuple</span><span class="p">)</span>
+            <span class="c1"># return new TMap</span>
+            <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># return element</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+            <span class="n">linear_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_idx</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.__setitem__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the item corresponding to (start, end). This function also works with arrays, resulting in advanced indexing</span>
+<span class="sd">        of the underlying 1D array.</span>
+<span class="sd">        :param key: (start, end)</span>
+<span class="sd">        :value: value to set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+        <span class="n">linear_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TMap.copy"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy the map. If the underlying data is a lists, tuple, numpy array or pytorch tensor, the appropriate functions</span>
+<span class="sd">        are called, otherwise a deepcopy of the data is made.</span>
+<span class="sd">        :return: Copied map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">copy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">copy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">copy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.top"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.top">[docs]</a>    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the sub-map corresponding to the top-most levels. A view of the underlying data is used, so the returned</span>
+<span class="sd">        TMap shares the same buffer and modification affect both objects.</span>
+<span class="sd">        :param depth: How many levels from the top to include</span>
+<span class="sd">        :return: sub-map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">depth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_start_end_from_level</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[:</span><span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.linear_start_end_from_level"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.linear_start_end_from_level">[docs]</a>    <span class="k">def</span> <span class="nf">linear_start_end_from_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the linear 1D start and end index corresponding to all values in the respective level of the map.</span>
+<span class="sd">        Slicing the underlying array as arr[start:end + 1] will return a view of the values on the level.</span>
+<span class="sd">        :param level: level for which to compute the indices</span>
+<span class="sd">        :return: linear 1D start and end index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">linear_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+        <span class="n">linear_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">linear_start</span><span class="p">,</span> <span class="n">linear_end</span></div>
+
+<div class="viewcode-block" id="TMap.lslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.lslice">[docs]</a>    <span class="k">def</span> <span class="nf">lslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slice the map at the given level, returning a view of the values.</span>
+<span class="sd">        :param level: level to use for slicing</span>
+<span class="sd">        :return: view of the values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">linear_start</span><span class="p">,</span> <span class="n">linear_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_start_end_from_level</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_start</span><span class="p">:</span><span class="n">linear_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.dslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.dslice">[docs]</a>    <span class="k">def</span> <span class="nf">dslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slice the map at the given depth, returning a view of the values.</span>
+<span class="sd">        :param depth: depth to use for slicing</span>
+<span class="sd">        :return: view of the values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lslice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TMap.end_indices_for_sslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.end_indices_for_sslice">[docs]</a>    <span class="k">def</span> <span class="nf">end_indices_for_sslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the end indices corresponding to a slice at the give start index.</span>
+<span class="sd">        :param start: start index</span>
+<span class="sd">        :return: integer array of end indices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.start_indices_for_eslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.start_indices_for_eslice">[docs]</a>    <span class="k">def</span> <span class="nf">start_indices_for_eslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the start indices corresponding to a slice at the give end index.</span>
+<span class="sd">        :param end: end index</span>
+<span class="sd">        :return: integer array of start indices</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TMap.get_sslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.get_sslice">[docs]</a>    <span class="k">def</span> <span class="nf">get_sslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a slice for the given start index. Internally, advanced indexing is used, so the returned values are</span>
+<span class="sd">        a copy, not a view. item can be a tuple to further slice down before retrieving the values.</span>
+<span class="sd">        :param item: start index or tuple of start index and additional indices/slices</span>
+<span class="sd">        :return: copy of slice at start index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">end_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">end_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.set_sslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.set_sslice">[docs]</a>    <span class="k">def</span> <span class="nf">set_sslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Like get_sslice but set value instead of returning values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">end_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">end_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TMap.get_eslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.get_eslice">[docs]</a>    <span class="k">def</span> <span class="nf">get_eslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a slice for the given end index. Internally, advanced indexing is used, so the returned values are</span>
+<span class="sd">        a copy, not a view. item can be a tuple to further slice down before retrieving the values.</span>
+<span class="sd">        :param item: end index or tuple of end index and additional indices/slices</span>
+<span class="sd">        :return: copy of slice at end index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">start_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">start_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.set_eslice"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.set_eslice">[docs]</a>    <span class="k">def</span> <span class="nf">set_eslice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Like get_eslice but set value instead of returning values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">start_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">start_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TMap.get_sblock"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.get_sblock">[docs]</a>    <span class="k">def</span> <span class="nf">get_sblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a block of sslices down from the specified level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)[:</span><span class="n">level</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">start_indices</span><span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">start_indices</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">linear_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_indices</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.set_sblock"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.set_sblock">[docs]</a>    <span class="k">def</span> <span class="nf">set_sblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Like get_sblock but set value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_indices_for_sslice</span><span class="p">(</span><span class="n">start</span><span class="p">)[:</span><span class="n">level</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">start_indices</span><span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">start_indices</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">linear_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TMap.get_eblock"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.get_eblock">[docs]</a>    <span class="k">def</span> <span class="nf">get_eblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a block of eslices down from the specified level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)[</span><span class="o">-</span><span class="n">level</span><span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">end_indices</span><span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">end_indices</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">linear_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_indices</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="TMap.set_eblock"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.set_eblock">[docs]</a>    <span class="k">def</span> <span class="nf">set_eblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Like get_sblock but set value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">start_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start_indices_for_eslice</span><span class="p">(</span><span class="n">end</span><span class="p">)[</span><span class="o">-</span><span class="n">level</span><span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">end_indices</span><span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">end_indices</span> <span class="o">=</span> <span class="n">end_indices</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">linear_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_from_start_end</span><span class="p">(</span><span class="n">start_indices</span><span class="p">,</span> <span class="n">end_indices</span><span class="p">)[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">linear_indices</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">linear_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="TMap.flatten"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.flatten">[docs]</a>    <span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;-l+s&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return map in linear order. The different orders correspond to iteration using two nested for loops where the</span>
+<span class="sd">        first letter indicates the outer dimension and the second the inner: s: start, e: end, l: level. A minus sign</span>
+<span class="sd">        reverses the order of the respective dimension.</span>
+<span class="sd">        :param order: string specifying order of linearisation: &#39;+s+e&#39;, &#39;+e+s&#39;, &#39;+l+s&#39; (+ can be omitted or replaced</span>
+<span class="sd">        with -)</span>
+<span class="sd">        :return: 1D array with values in given order</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get order info</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten_regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Invalid order &#39;</span><span class="si">{order}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="n">outer_dim</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;outer&#39;</span><span class="p">]</span>
+        <span class="n">inner_dim</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;inner&#39;</span><span class="p">]</span>
+        <span class="n">outer_sign</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;outer_sign&#39;</span><span class="p">]</span>
+        <span class="n">inner_sign</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;inner_sign&#39;</span><span class="p">]</span>
+        <span class="c1"># check</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">outer_dim</span><span class="p">,</span> <span class="n">inner_dim</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Outer/inner dimension must be s/e, e/s or l/s but are </span><span class="si">{outer_dim}</span><span class="s2">/</span><span class="si">{inner_dim}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># collect outer slices</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">outer_dim</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sslice</span><span class="p">[</span><span class="n">start</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">outer_dim</span> <span class="o">==</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eslice</span><span class="p">[</span><span class="n">end</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">outer_dim</span> <span class="o">==</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">outer_dim</span>
+            <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lslice</span><span class="p">(</span><span class="n">level</span><span class="p">))</span>
+        <span class="c1"># adjust sign for outer dimension</span>
+        <span class="k">if</span> <span class="n">outer_sign</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="ow">not</span> <span class="n">outer_sign</span> <span class="ow">or</span> <span class="n">outer_sign</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">outer_sign</span>
+        <span class="c1"># adjust sign for inner dimension</span>
+        <span class="k">if</span> <span class="n">inner_sign</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="ow">not</span> <span class="n">inner_sign</span> <span class="ow">or</span> <span class="n">inner_sign</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">inner_sign</span>
+        <span class="c1"># concatenate and return</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slices</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slices</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TMap.__repr__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;TMap(n=</span><span class="si">{self.n}</span><span class="s2">, </span><span class="si">{self.arr}</span><span class="s2">, linearise_blocks=</span><span class="si">{self.linearise_blocks}</span><span class="s2">)&quot;</span></div>
+
+<div class="viewcode-block" id="TMap.__str__"><a class="viewcode-back" href="../../_autosummary/TriangularMap.tmap.TMap.html#TriangularMap.tmap.TMap.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a string representation of the map, consisting of consecutive dsclices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dslice</span><span class="p">(</span><span class="n">depth</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;[&quot;</span>
+                <span class="n">linear_start</span><span class="p">,</span> <span class="n">linear_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_start_end_from_level</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span><span class="p">))</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">linear_start</span><span class="p">,</span> <span class="n">linear_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+<div class="viewcode-block" id="TMap.pretty"><a class="viewcode-back" href="../../index.html#TriangularMap.tmap.TMap.pretty">[docs]</a>    <span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">str_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detach_pytorch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rnd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param cut: cut at specified level, printing only the bottom &#39;cut&#39; levels of the map</span>
+<span class="sd">        :param str_func: function to convert values to strings (default: str)</span>
+<span class="sd">        :param detach_pytorch: whether to detach tensors if the underlying array is a pytorch tensor</span>
+<span class="sd">        :param scf: kwargs to use np.format_float_scientific to format value</span>
+<span class="sd">        :param pos: kwargs to use np.format_float_positional to format value</span>
+<span class="sd">        :param rnd: kwargs to use np.around to format value</span>
+<span class="sd">        :return: pretty-printed string</span>
+
+<span class="sd">         ╳</span>
+<span class="sd">        ╳0╳</span>
+<span class="sd">       ╳0╳0╳</span>
+<span class="sd">      ╳0╳0╳0╳</span>
+<span class="sd">     ╳0╳0╳0╳0╳</span>
+<span class="sd">    ╳0╳0╳0╳0╳0╳</span>
+<span class="sd">   ╳0╳0╳0╳0╳0╳0╳</span>
+<span class="sd">  ╳0╳0╳0╳0╳0╳0╳0╳</span>
+<span class="sd"> ╳0╳0╳0╳0╳0╳0╳0╳0╳</span>
+<span class="sd">╳0╳0╳0╳0╳0╳0╳0╳0╳0╳</span>
+<span class="sd">│ │ │ │ │ │ │ │ │ │</span>
+<span class="sd">0 1 2 3 4 5 6 7 8 9</span>
+
+<span class="sd">                 ╳</span>
+<span class="sd">                ╱ ╲</span>
+<span class="sd">               ╳000╳</span>
+<span class="sd">              ╱ ╲ ╱ ╲</span>
+<span class="sd">             ╳000╳000╳</span>
+<span class="sd">            ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd">           ╳000╳000╳000╳</span>
+<span class="sd">          ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd">         ╳000╳000╳000╳000╳</span>
+<span class="sd">        ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd">       ╳000╳000╳000╳000╳000╳</span>
+<span class="sd">      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd">     ╳000╳000╳000╳000╳000╳000╳</span>
+<span class="sd">    ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd">   ╳000╳000╳000╳000╳000╳000╳000╳</span>
+<span class="sd">  ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲</span>
+<span class="sd"> ╳000╳000╳000╳000╳000╳000╳000╳000╳</span>
+<span class="sd"> │   │   │   │   │   │   │   │   │</span>
+<span class="sd"> 0   1   2   3   4   5   6   7   8</span>
+
+<span class="sd">                 ╱╲</span>
+<span class="sd">                ╱00╲</span>
+<span class="sd">               ╱╲  ╱╲</span>
+<span class="sd">              ╱00╲╱00╲</span>
+<span class="sd">             ╱╲  ╱╲  ╱╲</span>
+<span class="sd">            ╱00╲╱00╲╱00╲</span>
+<span class="sd">           ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">          ╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd">         ╱╲  ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">        ╱00╲╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd">       ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">      ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd">     ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">    ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd">   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">  ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd"> ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲</span>
+<span class="sd">╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲</span>
+<span class="sd">│   │   │   │   │   │   │   │   │   │</span>
+<span class="sd">0   1   2   3   4   5   6   7   8   9</span>
+
+<span class="sd">                          ╱╲</span>
+<span class="sd">                         ╱  ╲</span>
+<span class="sd">                        ╱0000╲</span>
+<span class="sd">                       ╱╲    ╱╲</span>
+<span class="sd">                      ╱  ╲  ╱  ╲</span>
+<span class="sd">                     ╱0000╲╱0000╲</span>
+<span class="sd">                    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">                   ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">                  ╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">                 ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">                ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">               ╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">              ╱╲    ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">             ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">            ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">           ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">          ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">         ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">        ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">       ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">      ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">     ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd">    ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">   ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">  ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲</span>
+<span class="sd"> ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲</span>
+<span class="sd">╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲</span>
+<span class="sd">│     │     │     │     │     │     │     │     │     │</span>
+<span class="sd">0     1     2     3     4     5     6     7     8     9</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get function to convert values to strings</span>
+        <span class="k">if</span> <span class="n">str_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">scf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">str_func</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_scientific</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">scf</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">str_func</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_positional</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">rnd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">str_func</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">rnd</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;decimals&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">rnd</span><span class="p">)))</span>
+                        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">rnd</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">rnd</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">str_func</span> <span class="o">=</span> <span class="nb">str</span>
+            <span class="c1"># if isinstance(self.arr, torch.Tensor) and detach_pytorch:</span>
+            <span class="c1">#     def str_func(val):</span>
+            <span class="c1">#         return str(val.detach().numpy()[0])</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     str_func = str</span>
+        <span class="c1"># get values as strings</span>
+        <span class="n">str_slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">str_slices</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="c1"># level corresponding to depth</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span>
+            <span class="c1"># cut at level</span>
+            <span class="k">if</span> <span class="n">cut</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="n">cut</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dslice</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="n">detach_pytorch</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="n">str_val</span> <span class="o">=</span> <span class="n">str_func</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">max_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_width</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">str_val</span><span class="p">))</span>
+                <span class="n">str_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">str_val</span><span class="p">)</span>
+        <span class="c1"># width must be even</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># adjust width</span>
+        <span class="k">for</span> <span class="n">sl_idx</span><span class="p">,</span> <span class="n">sl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">str_slices</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">str_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sl</span><span class="p">):</span>
+                <span class="n">str_slices</span><span class="p">[</span><span class="n">sl_idx</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">str_val</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">max_width</span><span class="p">)</span>
+        <span class="c1"># for x in str_slices:</span>
+        <span class="c1">#     print(x)</span>
+        <span class="c1"># generate triangular matrix</span>
+        <span class="n">lines_per_level</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">depth</span><span class="p">,</span> <span class="n">sl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">str_slices</span><span class="p">):</span>
+            <span class="c1"># level corresponding to depth</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span>
+            <span class="c1"># cut at level</span>
+            <span class="k">if</span> <span class="n">cut</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="n">cut</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># base indentation of this slice</span>
+            <span class="n">depth_indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">lines_per_level</span> <span class="o">*</span> <span class="p">(</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lines_per_level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># newline exept for first line</span>
+                <span class="k">if</span> <span class="n">s</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="c1"># additional indent for this line of slice</span>
+                <span class="n">line_indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">lines_per_level</span> <span class="o">-</span> <span class="n">line</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># spacing within and in between cells</span>
+                <span class="n">within_cell_spacing</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">line</span>
+                <span class="n">in_between_cell_spacing</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">lines_per_level</span> <span class="o">-</span> <span class="n">line</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># add indentation</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">line_indent</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span> <span class="o">+</span> <span class="n">in_between_cell_spacing</span><span class="p">)</span> <span class="o">*</span> <span class="n">depth</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="s2">&quot;╲╱&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sl</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span>
+        <span class="k">return</span> <span class="n">s</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Robert Lieck.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

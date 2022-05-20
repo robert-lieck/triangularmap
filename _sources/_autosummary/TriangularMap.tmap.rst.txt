@@ -1,7 +1,7 @@
-TriangularMap.myclass
-=====================
+TriangularMap.tmap
+==================
 
-.. automodule:: TriangularMap.myclass
+.. automodule:: TriangularMap.tmap
 
    
    
@@ -19,7 +19,7 @@ TriangularMap.myclass
       :toctree:
       :template: custom-class-template.rst
    
-      MyClass
+      TMap
    
    
 
