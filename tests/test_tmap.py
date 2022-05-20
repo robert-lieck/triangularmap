@@ -7,7 +7,7 @@ import numpy as np
 from numpy.testing import assert_array_equal
 import torch
 
-from tmap import TMap
+from TriangularMap.tmap import TMap
 
 
 class TestTMap(TestCase):
