@@ -93,6 +93,34 @@ class TMap:
             raise ValueError(f"{N} is not a valid size for a triangular map (n={n})")
         return cls.to_int(np.floor(n))
 
+    @classmethod
+    def get_reindex_top_down_from_start_end(cls, n):
+        n_elem = np.arange(n + 1)
+        idx_shift = n * (n + 1) // 2 - np.flip(n_elem * (n_elem + 1) // 2)
+        index_list = []
+        for idx in range(1, n + 1):
+            index_list.append(idx_shift[:idx] + (n - idx))
+        return np.concatenate(index_list)
+
+    @classmethod
+    def reindex_top_down_from_start_end(cls, arr):
+        n = TMap.n_from_size1d(arr.shape[0])
+        return arr[cls.get_reindex_top_down_from_start_end(n)]
+
+    @classmethod
+    def get_reindex_start_end_from_top_down(cls, n):
+        n_elem = np.arange(n + 1)
+        sum_elem = n_elem * (n_elem + 1) // 2
+        index_list = []
+        for idx in range(n):
+            index_list.append(np.flip(sum_elem[idx:n] + idx))
+        return np.concatenate(index_list)
+
+    @classmethod
+    def reindex_start_end_from_top_down(cls, arr):
+        n = TMap.n_from_size1d(arr.shape[0])
+        return arr[cls.get_reindex_start_end_from_top_down(n)]
+
     def __init__(self, arr, linearise_blocks=False):
         self.n = self.n_from_size1d(len(arr))
         self.arr = arr
