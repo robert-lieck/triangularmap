@@ -1,7 +1,7 @@
-TriangularMap.tmap
+triangularmap.tmap
 ==================
 
-.. automodule:: TriangularMap.tmap
+.. automodule:: triangularmap.tmap
 
    
    

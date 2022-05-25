@@ -1,7 +1,7 @@
-TriangularMap.tmap.TMap
+triangularmap.tmap.TMap
 =======================
 
-.. currentmodule:: TriangularMap.tmap
+.. currentmodule:: triangularmap.tmap
 
 .. autoclass:: TMap
    :members:

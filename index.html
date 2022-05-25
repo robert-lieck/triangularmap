@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to TriangularMap’s documentation! &mdash; TriangularMap  documentation</title>
+  <title>Welcome to TriangularMap’s documentation! &mdash; triangularmap  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/autoclasstoc.css" type="text/css" />
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> TriangularMap
+            <a href="#" class="icon icon-home"> triangularmap
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -48,7 +48,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">TriangularMap</a>
+          <a href="#">triangularmap</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -71,9 +71,9 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api_summary.html">API Summary</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/TriangularMap.html">TriangularMap</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="_autosummary/TriangularMap.tmap.html">TriangularMap.tmap</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="_autosummary/TriangularMap.tmap.TMap.html">TriangularMap.tmap.TMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/triangularmap.html">triangularmap</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/triangularmap.tmap.html">triangularmap.tmap</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/triangularmap.tmap.TMap.html">triangularmap.tmap.TMap</a></li>
 </ul>
 </li>
 </ul>
@@ -88,8 +88,8 @@
 </pre></div>
 </div>
 <dl class="py class">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TriangularMap.tmap.</span></span><span class="sig-name descname"><span class="pre">TMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linearise_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">TMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linearise_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap" title="Permalink to this definition"></a></dt>
 <dd><p>A wrapper around a 1D array that provides access in triangular (or ternary) coordinates. A 1D array of length
 N = n * (n + 1) / 2 is mapped to a triangular layout as follows (here with N=21 and n=6):</p>
 <blockquote>
@@ -143,22 +143,22 @@ copy of the values is returned instead of a view). Additionally, slices by depth
 underlying array segment. Slices by start or end index are also supported but internally use advanced indexing, so
 they return a copy, not a view.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.GetSetWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetSetWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.GetSetWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.GetSetWrapper" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.GetSetWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetSetWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.GetSetWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.GetSetWrapper" title="Permalink to this definition"></a></dt>
 <dd><p>Wrapper class that delegates __getitem__ and __setitem__ to custom functions</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.copy" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.copy" title="Permalink to this definition"></a></dt>
 <dd><p>Copy the map. If the underlying data is a lists, tuple, numpy array or pytorch tensor, the appropriate functions
 are called, otherwise a deepcopy of the data is made.
 :return: Copied map.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.depth">
-<span class="sig-name descname"><span class="pre">depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.depth" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.depth">
+<span class="sig-name descname"><span class="pre">depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.depth" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the depth d corresponding to (start, end): d = n - (end - start). This function also works with arrays.
 :param start: start index or array of indices
 :param end: end index or array of indices
@@ -166,24 +166,24 @@ are called, otherwise a deepcopy of the data is made.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.dslice">
-<span class="sig-name descname"><span class="pre">dslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.dslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.dslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.dslice">
+<span class="sig-name descname"><span class="pre">dslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.dslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.dslice" title="Permalink to this definition"></a></dt>
 <dd><p>Slice the map at the given depth, returning a view of the values.
 :param depth: depth to use for slicing
 :return: view of the values</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.end_indices_for_sslice">
-<span class="sig-name descname"><span class="pre">end_indices_for_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.end_indices_for_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.end_indices_for_sslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.end_indices_for_sslice">
+<span class="sig-name descname"><span class="pre">end_indices_for_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.end_indices_for_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.end_indices_for_sslice" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the end indices corresponding to a slice at the give start index.
 :param start: start index
 :return: integer array of end indices</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.flatten">
-<span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-l+s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.flatten" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.flatten">
+<span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-l+s'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.flatten" title="Permalink to this definition"></a></dt>
 <dd><p>Return map in linear order. The different orders correspond to iteration using two nested for loops where the
 first letter indicates the outer dimension and the second the inner: s: start, e: end, l: level. A minus sign
 reverses the order of the respective dimension.
@@ -193,14 +193,14 @@ with -)
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.get_eblock">
-<span class="sig-name descname"><span class="pre">get_eblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.get_eblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.get_eblock" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_eblock">
+<span class="sig-name descname"><span class="pre">get_eblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.get_eblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_eblock" title="Permalink to this definition"></a></dt>
 <dd><p>Return a block of eslices down from the specified level.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.get_eslice">
-<span class="sig-name descname"><span class="pre">get_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.get_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.get_eslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_eslice">
+<span class="sig-name descname"><span class="pre">get_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.get_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_eslice" title="Permalink to this definition"></a></dt>
 <dd><p>Return a slice for the given end index. Internally, advanced indexing is used, so the returned values are
 a copy, not a view. item can be a tuple to further slice down before retrieving the values.
 :param item: end index or tuple of end index and additional indices/slices
@@ -208,14 +208,14 @@ a copy, not a view. item can be a tuple to further slice down before retrieving 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.get_sblock">
-<span class="sig-name descname"><span class="pre">get_sblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.get_sblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.get_sblock" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_sblock">
+<span class="sig-name descname"><span class="pre">get_sblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.get_sblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_sblock" title="Permalink to this definition"></a></dt>
 <dd><p>Return a block of sslices down from the specified level.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.get_sslice">
-<span class="sig-name descname"><span class="pre">get_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.get_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.get_sslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_sslice">
+<span class="sig-name descname"><span class="pre">get_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.get_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_sslice" title="Permalink to this definition"></a></dt>
 <dd><p>Return a slice for the given start index. Internally, advanced indexing is used, so the returned values are
 a copy, not a view. item can be a tuple to further slice down before retrieving the values.
 :param item: start index or tuple of start index and additional indices/slices
@@ -223,8 +223,8 @@ a copy, not a view. item can be a tuple to further slice down before retrieving 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.level">
-<span class="sig-name descname"><span class="pre">level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.level" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.level">
+<span class="sig-name descname"><span class="pre">level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.level" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the level from depth or (start, end). If (start, end) is given, the depth function is used to first
 compute the depth. This function also works with arrays.
 :param args: either one argument (depth) or two (start, end), which can also be arrays
@@ -232,8 +232,8 @@ compute the depth. This function also works with arrays.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.linear_from_start_end">
-<span class="sig-name descname"><span class="pre">linear_from_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.linear_from_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.linear_from_start_end" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.linear_from_start_end">
+<span class="sig-name descname"><span class="pre">linear_from_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.linear_from_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.linear_from_start_end" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the linear index (in the underlying 1D array) corresponding to a (start, end) pair. This function also
 works with arrays.
 :param start: start index or array of indices
@@ -242,8 +242,8 @@ works with arrays.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.linear_start_end_from_level">
-<span class="sig-name descname"><span class="pre">linear_start_end_from_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.linear_start_end_from_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.linear_start_end_from_level" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.linear_start_end_from_level">
+<span class="sig-name descname"><span class="pre">linear_start_end_from_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.linear_start_end_from_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.linear_start_end_from_level" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the linear 1D start and end index corresponding to all values in the respective level of the map.
 Slicing the underlying array as arr[start:end + 1] will return a view of the values on the level.
 :param level: level for which to compute the indices
@@ -251,16 +251,16 @@ Slicing the underlying array as arr[start:end + 1] will return a view of the val
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.lslice">
-<span class="sig-name descname"><span class="pre">lslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.lslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.lslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.lslice">
+<span class="sig-name descname"><span class="pre">lslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.lslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.lslice" title="Permalink to this definition"></a></dt>
 <dd><p>Slice the map at the given level, returning a view of the values.
 :param level: level to use for slicing
 :return: view of the values</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.n_from_size1d">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_from_size1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.n_from_size1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.n_from_size1d" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.n_from_size1d">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_from_size1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.n_from_size1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.n_from_size1d" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate width n of the map given the size N of the underlying 1D array: n = (sqrt(8 * N + 1) - 1) / 2.
 Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.
 This function also works with arrays.
@@ -269,8 +269,8 @@ This function also works with arrays.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.pretty">
-<span class="sig-name descname"><span class="pre">pretty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detach_pytorch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.pretty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.pretty" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.pretty">
+<span class="sig-name descname"><span class="pre">pretty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detach_pytorch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.pretty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.pretty" title="Permalink to this definition"></a></dt>
 <dd><blockquote>
 <div><blockquote>
 <div><blockquote>
@@ -511,32 +511,32 @@ This function also works with arrays.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.set_eblock">
-<span class="sig-name descname"><span class="pre">set_eblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.set_eblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.set_eblock" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.set_eblock">
+<span class="sig-name descname"><span class="pre">set_eblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.set_eblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.set_eblock" title="Permalink to this definition"></a></dt>
 <dd><p>Like get_sblock but set value.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.set_eslice">
-<span class="sig-name descname"><span class="pre">set_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.set_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.set_eslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.set_eslice">
+<span class="sig-name descname"><span class="pre">set_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.set_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.set_eslice" title="Permalink to this definition"></a></dt>
 <dd><p>Like get_eslice but set value instead of returning values.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.set_sblock">
-<span class="sig-name descname"><span class="pre">set_sblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.set_sblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.set_sblock" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.set_sblock">
+<span class="sig-name descname"><span class="pre">set_sblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.set_sblock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.set_sblock" title="Permalink to this definition"></a></dt>
 <dd><p>Like get_sblock but set value.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.set_sslice">
-<span class="sig-name descname"><span class="pre">set_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.set_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.set_sslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.set_sslice">
+<span class="sig-name descname"><span class="pre">set_sslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.set_sslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.set_sslice" title="Permalink to this definition"></a></dt>
 <dd><p>Like get_sslice but set value instead of returning values.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.size1d_from_n">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size1d_from_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.size1d_from_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.size1d_from_n" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.size1d_from_n">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size1d_from_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.size1d_from_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.size1d_from_n" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the size N of the underlying 1D array for a given width n of the triangular map: N = n * (n + 1)) / 2.
 This function also works with arrays.
 :param n: Width (number of entries at the bottom of the map)
@@ -544,24 +544,24 @@ This function also works with arrays.
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.start_indices_for_eslice">
-<span class="sig-name descname"><span class="pre">start_indices_for_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.start_indices_for_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.start_indices_for_eslice" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.start_indices_for_eslice">
+<span class="sig-name descname"><span class="pre">start_indices_for_eslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.start_indices_for_eslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.start_indices_for_eslice" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the start indices corresponding to a slice at the give end index.
 :param end: end index
 :return: integer array of start indices</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.to_int">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.to_int" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.to_int">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.to_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.to_int" title="Permalink to this definition"></a></dt>
 <dd><p>Convert i to integer, no matter whether it is a single number or a numpy array.
 :param i: number or array of numbers
 :return: integer or array of integers</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TriangularMap.tmap.TMap.top">
-<span class="sig-name descname"><span class="pre">top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TriangularMap/tmap.html#TMap.top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TriangularMap.tmap.TMap.top" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="triangularmap.tmap.TMap.top">
+<span class="sig-name descname"><span class="pre">top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/triangularmap/tmap.html#TMap.top"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.top" title="Permalink to this definition"></a></dt>
 <dd><p>Return the sub-map corresponding to the top-most levels. A view of the underlying data is used, so the returned
 TMap shares the same buffer and modification affect both objects.
 :param depth: How many levels from the top to include

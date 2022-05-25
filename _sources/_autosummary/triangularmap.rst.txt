@@ -1,7 +1,7 @@
-﻿TriangularMap
+﻿triangularmap
 =============
 
-.. automodule:: TriangularMap
+.. automodule:: triangularmap
 
    
    
@@ -28,5 +28,5 @@
    :template: custom-module-template.rst
    :recursive:
 
-   TriangularMap.tmap
+   triangularmap.tmap
 
