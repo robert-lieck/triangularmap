@@ -17,7 +17,7 @@ Code examples are automatically tested
    Hello World
 
 
-.. autoclass:: TriangularMap.tmap.TMap
+.. autoclass:: triangularmap.tmap.TMap
    :members:
 
 
