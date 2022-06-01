@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>triangularmap.tmap.TMap &mdash; triangularmap  documentation</title>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -78,7 +79,7 @@
            <div itemprop="articleBody">
              
   <section id="triangularmap-tmap-tmap">
-<h1>triangularmap.tmap.TMap<a class="headerlink" href="#triangularmap-tmap-tmap" title="Permalink to this headline"></a></h1>
+<h1>triangularmap.tmap.TMap<a class="headerlink" href="#triangularmap-tmap-tmap" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">TMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linearise_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap" title="Permalink to this definition"></a></dt>
@@ -138,10 +139,6 @@ they return a copy, not a view.</p>
 <div class="autoclasstoc docutils container">
 <p class="rubric">Public Data Attributes:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#triangularmap.tmap.TMap.flatten_regex" title="triangularmap.tmap.TMap.flatten_regex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten_regex</span></code></a></p></td>
 <td><p></p></td>
@@ -152,10 +149,6 @@ they return a copy, not a view.</p>
 <div class="autoclasstoc docutils container">
 <p class="rubric">Public Methods:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../index.html#triangularmap.tmap.TMap.to_int" title="triangularmap.tmap.TMap.to_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_int</span></code></a>(i)</p></td>
 <td><p>Convert i to integer, no matter whether it is a single number or a numpy array.</p></td>
@@ -252,7 +245,7 @@ they return a copy, not a view.</p>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../index.html#triangularmap.tmap.TMap.pretty" title="triangularmap.tmap.TMap.pretty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pretty</span></code></a>([cut, str_func, detach_pytorch, scf, ...])</p></td>
 <td><p><dl class="field-list simple">
-<dt class="field-odd">param cut</dt>
+<dt class="field-odd">param cut<span class="colon">:</span></dt>
 <dd class="field-odd"><p>cut at specified level, printing only the bottom 'cut' levels of the map</p>
 </dd>
 </dl>
@@ -264,10 +257,6 @@ they return a copy, not a view.</p>
 <div class="autoclasstoc docutils container">
 <p class="rubric">Private Methods:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#triangularmap.tmap.TMap._check" title="triangularmap.tmap.TMap._check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check</span></code></a>(start, end)</p></td>
 <td><p>Check whether 0 &lt;= start &lt; end &lt; n.</p></td>
@@ -521,25 +510,25 @@ This function also works with arrays.
 <div><blockquote>
 <div><blockquote>
 <div><dl class="field-list">
-<dt class="field-odd">param cut</dt>
+<dt class="field-odd">param cut<span class="colon">:</span></dt>
 <dd class="field-odd"><p>cut at specified level, printing only the bottom ‘cut’ levels of the map</p>
 </dd>
-<dt class="field-even">param str_func</dt>
+<dt class="field-even">param str_func<span class="colon">:</span></dt>
 <dd class="field-even"><p>function to convert values to strings (default: str)</p>
 </dd>
-<dt class="field-odd">param detach_pytorch</dt>
+<dt class="field-odd">param detach_pytorch<span class="colon">:</span></dt>
 <dd class="field-odd"><p>whether to detach tensors if the underlying array is a pytorch tensor</p>
 </dd>
-<dt class="field-even">param scf</dt>
+<dt class="field-even">param scf<span class="colon">:</span></dt>
 <dd class="field-even"><p>kwargs to use np.format_float_scientific to format value</p>
 </dd>
-<dt class="field-odd">param pos</dt>
+<dt class="field-odd">param pos<span class="colon">:</span></dt>
 <dd class="field-odd"><p>kwargs to use np.format_float_positional to format value</p>
 </dd>
-<dt class="field-even">param rnd</dt>
+<dt class="field-even">param rnd<span class="colon">:</span></dt>
 <dd class="field-even"><p>kwargs to use np.around to format value</p>
 </dd>
-<dt class="field-odd">return</dt>
+<dt class="field-odd">return<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pretty-printed string</p>
 <p>╳</p>
 </dd>
