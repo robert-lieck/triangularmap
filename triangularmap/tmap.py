@@ -12,28 +12,33 @@ class TMap:
     A wrapper around a 1D array that provides access in triangular (or ternary) coordinates. A 1D array of length
     N = n * (n + 1) / 2 is mapped to a triangular layout as follows (here with N=21 and n=6):
 
-                           /\         depth  level
-                          /0 \            0      6
-                         /\  /\
-                        /1 \/ 2\          1      5
-                       /\  /\  /\
-                      /3 \/4 \/5 \        2      4
-                     /\  /\  /\  /\
-                    /6 \/7 \/8 \/9 \      3      3
-                   /\  /\  /\  /\  /\
-                  /10\/11\/12\/13\/14\    4      2
-                 /\  /\  /\  /\  /\  /\
-                /15\/16\/17\/18\/19\/20\  5      1
-               |   |   |   |   |   |   |
-    start/end: 0   1   2   3   4   5   6
+    ::
+
+                               /\\         depth  level
+                              /0 \\            0      6
+                             /\\  /\\
+                            /1 \\/ 2\\          1      5
+                           /\\  /\\  /\\
+                          /3 \\/4 \\/5 \\        2      4
+                         /\\  /\\  /\\  /\\
+                        /6 \\/7 \\/8 \\/9 \\      3      3
+                       /\\  /\\  /\\  /\\  /\\
+                      /10\\/11\\/12\\/13\\/14\\    4      2
+                     /\\  /\\  /\\  /\\  /\\  /\\
+                    /15\\/16\\/17\\/18\\/19\\/20\\  5      1
+                   |   |   |   |   |   |   |
+        start/end: 0   1   2   3   4   5   6
 
     Values can be accessed by start and end index (0 <= start < end <= n) as follows:
-                   (0, 6)
-                (0, 5) (1, 6)
-             (0, 4) (1, 5) (2, 6)
-          (0, 3) (1, 4) (2, 5) (3, 6)
-       (0, 2) (1, 3) (2, 4) (3, 5) (4, 6)
-    (0, 1) (1, 2) (2, 3) (3, 4) (4, 5) (5, 6)
+
+    ::
+
+                       (0, 6)
+                    (0, 5) (1, 6)
+                 (0, 4) (1, 5) (2, 6)
+              (0, 3) (1, 4) (2, 5) (3, 6)
+           (0, 2) (1, 3) (2, 4) (3, 5) (4, 6)
+        (0, 1) (1, 2) (2, 3) (3, 4) (4, 5) (5, 6)
 
     That is (start, end) is mapped to the linear index depth * (depth + 1) / 2 + end - level, where
     depth = n - (end - start) and level = n - depth. Advanced integer index arrays are processed in the same way and
@@ -46,7 +51,9 @@ class TMap:
     flatten_regex = re.compile("^(?P<outer_sign>[+-]?)(?P<outer>[sel])(?P<inner_sign>[+-]?)(?P<inner>[sel])$")
 
     class GetSetWrapper:
-        """Wrapper class that delegates __getitem__ and __setitem__ to custom functions"""
+        """
+        Wrapper class that delegates __getitem__ and __setitem__ to custom functions
+        """
         def __init__(self, getter, setter):
             self.getter = getter
             self.setter = setter
@@ -61,6 +68,7 @@ class TMap:
     def to_int(cls, i):
         """
         Convert i to integer, no matter whether it is a single number or a numpy array.
+
         :param i: number or array of numbers
         :return: integer or array of integers
         """
@@ -74,24 +82,26 @@ class TMap:
         """
         Calculate the size N of the underlying 1D array for a given width n of the triangular map: N = n * (n + 1)) / 2.
         This function also works with arrays.
+
         :param n: Width (number of entries at the bottom of the map)
         :return: Length of underlying 1D array (total number of entries in the map)
         """
         return cls.to_int((n * (n + 1)) / 2)
 
     @classmethod
-    def n_from_size1d(cls, N):
+    def n_from_size1d(cls, n):
         """
         Calculate width n of the map given the size N of the underlying 1D array: n = (sqrt(8 * N + 1) - 1) / 2.
         Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.
         This function also works with arrays.
-        :param N: size of the underlying 1D array
+
+        :param n: size of the underlying 1D array
         :return: width of the map
         """
-        n = (np.sqrt(8 * N + 1) - 1) / 2
-        if cls.size1d_from_n(np.floor(n)) != N:
-            raise ValueError(f"{N} is not a valid size for a triangular map (n={n})")
-        return cls.to_int(np.floor(n))
+        n_ = (np.sqrt(8 * n + 1) - 1) / 2
+        if cls.size1d_from_n(np.floor(n_)) != n:
+            raise ValueError(f"{n} is not a valid size for a triangular map (n={n_})")
+        return cls.to_int(np.floor(n_))
 
     @classmethod
     def get_reindex_top_down_from_start_end(cls, n):
@@ -138,6 +148,7 @@ class TMap:
         """
         Check whether 0 <= start < end < n. This function also works with arrays, in which case all start/end values
         have to pass the check. If the check is not passed, an IndexError is raised
+
         :param start: start index or array of indices
         :param end: end index or array of indices
         """
@@ -154,6 +165,7 @@ class TMap:
     def depth(self, start, end):
         """
         Compute the depth d corresponding to (start, end): d = n - (end - start). This function also works with arrays.
+
         :param start: start index or array of indices
         :param end: end index or array of indices
         :return: depth or array of depth values
@@ -164,6 +176,7 @@ class TMap:
         """
         Compute the level from depth or (start, end). If (start, end) is given, the depth function is used to first
         compute the depth. This function also works with arrays.
+
         :param args: either one argument (depth) or two (start, end), which can also be arrays
         :return: depth or array of depth values
         """
@@ -180,6 +193,7 @@ class TMap:
         """
         Compute the linear index (in the underlying 1D array) corresponding to a (start, end) pair. This function also
         works with arrays.
+
         :param start: start index or array of indices
         :param end: end index or array of indices
         :return: linear index or array of linear indices
@@ -192,6 +206,7 @@ class TMap:
         """
         Get the item corresponding to (start, end) or the sub-map corresponding to slice start:end. For items, this
         function also works with arrays, resulting in advanced indexing of the underlying 1D array.
+
         :param item: (start, end) or slice
         :return: element or sub-map
         """
@@ -227,6 +242,7 @@ class TMap:
         """
         Set the item corresponding to (start, end). This function also works with arrays, resulting in advanced indexing
         of the underlying 1D array.
+
         :param key: (start, end)
         :value: value to set
         """
@@ -239,6 +255,7 @@ class TMap:
         """
         Copy the map. If the underlying data is a lists, tuple, numpy array or pytorch tensor, the appropriate functions
         are called, otherwise a deepcopy of the data is made.
+
         :return: Copied map.
         """
         if isinstance(self.arr, np.ndarray):
@@ -257,6 +274,7 @@ class TMap:
         """
         Return the sub-map corresponding to the top-most levels. A view of the underlying data is used, so the returned
         TMap shares the same buffer and modification affect both objects.
+
         :param depth: How many levels from the top to include
         :return: sub-map
         """
@@ -270,6 +288,7 @@ class TMap:
         """
         Compute the linear 1D start and end index corresponding to all values in the respective level of the map.
         Slicing the underlying array as arr[start:end + 1] will return a view of the values on the level.
+
         :param level: level for which to compute the indices
         :return: linear 1D start and end index
         """
@@ -280,6 +299,7 @@ class TMap:
     def lslice(self, level):
         """
         Slice the map at the given level, returning a view of the values.
+
         :param level: level to use for slicing
         :return: view of the values
         """
@@ -289,6 +309,7 @@ class TMap:
     def dslice(self, depth):
         """
         Slice the map at the given depth, returning a view of the values.
+
         :param depth: depth to use for slicing
         :return: view of the values
         """
@@ -297,6 +318,7 @@ class TMap:
     def end_indices_for_sslice(self, start):
         """
         Compute the end indices corresponding to a slice at the give start index.
+
         :param start: start index
         :return: integer array of end indices
         """
@@ -305,6 +327,7 @@ class TMap:
     def start_indices_for_eslice(self, end):
         """
         Compute the start indices corresponding to a slice at the give end index.
+
         :param end: end index
         :return: integer array of start indices
         """
@@ -314,6 +337,7 @@ class TMap:
         """
         Return a slice for the given start index. Internally, advanced indexing is used, so the returned values are
         a copy, not a view. item can be a tuple to further slice down before retrieving the values.
+
         :param item: start index or tuple of start index and additional indices/slices
         :return: copy of slice at start index
         """
@@ -343,6 +367,7 @@ class TMap:
         """
         Return a slice for the given end index. Internally, advanced indexing is used, so the returned values are
         a copy, not a view. item can be a tuple to further slice down before retrieving the values.
+
         :param item: end index or tuple of end index and additional indices/slices
         :return: copy of slice at end index
         """
@@ -465,8 +490,9 @@ class TMap:
         Return map in linear order. The different orders correspond to iteration using two nested for loops where the
         first letter indicates the outer dimension and the second the inner: s: start, e: end, l: level. A minus sign
         reverses the order of the respective dimension.
+
         :param order: string specifying order of linearisation: '+s+e', '+e+s', '+l+s' (+ can be omitted or replaced
-        with -)
+         with -)
         :return: 1D array with values in given order
         """
         # get order info
@@ -530,6 +556,7 @@ class TMap:
 
     def pretty(self, cut=None, str_func=None, detach_pytorch=True, scf=None, pos=None, rnd=None):
         """
+
         :param cut: cut at specified level, printing only the bottom 'cut' levels of the map
         :param str_func: function to convert values to strings (default: str)
         :param detach_pytorch: whether to detach tensors if the underlying array is a pytorch tensor
@@ -538,89 +565,97 @@ class TMap:
         :param rnd: kwargs to use np.around to format value
         :return: pretty-printed string
 
-         ╳
-        ╳0╳
-       ╳0╳0╳
-      ╳0╳0╳0╳
-     ╳0╳0╳0╳0╳
-    ╳0╳0╳0╳0╳0╳
-   ╳0╳0╳0╳0╳0╳0╳
-  ╳0╳0╳0╳0╳0╳0╳0╳
- ╳0╳0╳0╳0╳0╳0╳0╳0╳
-╳0╳0╳0╳0╳0╳0╳0╳0╳0╳
-│ │ │ │ │ │ │ │ │ │
-0 1 2 3 4 5 6 7 8 9
+        ::
 
-                 ╳
-                ╱ ╲
-               ╳000╳
-              ╱ ╲ ╱ ╲
-             ╳000╳000╳
-            ╱ ╲ ╱ ╲ ╱ ╲
-           ╳000╳000╳000╳
-          ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-         ╳000╳000╳000╳000╳
-        ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-       ╳000╳000╳000╳000╳000╳
-      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-     ╳000╳000╳000╳000╳000╳000╳
-    ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-   ╳000╳000╳000╳000╳000╳000╳000╳
-  ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
- ╳000╳000╳000╳000╳000╳000╳000╳000╳
- │   │   │   │   │   │   │   │   │
- 0   1   2   3   4   5   6   7   8
+                     ╳
+                    ╳0╳
+                   ╳0╳0╳
+                  ╳0╳0╳0╳
+                 ╳0╳0╳0╳0╳
+                ╳0╳0╳0╳0╳0╳
+               ╳0╳0╳0╳0╳0╳0╳
+              ╳0╳0╳0╳0╳0╳0╳0╳
+             ╳0╳0╳0╳0╳0╳0╳0╳0╳
+            ╳0╳0╳0╳0╳0╳0╳0╳0╳0╳
+            │ │ │ │ │ │ │ │ │ │
+            0 1 2 3 4 5 6 7 8 9
 
-                 ╱╲
-                ╱00╲
-               ╱╲  ╱╲
-              ╱00╲╱00╲
-             ╱╲  ╱╲  ╱╲
-            ╱00╲╱00╲╱00╲
-           ╱╲  ╱╲  ╱╲  ╱╲
-          ╱00╲╱00╲╱00╲╱00╲
-         ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-        ╱00╲╱00╲╱00╲╱00╲╱00╲
-       ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-      ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-     ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-    ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-  ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
- ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-│   │   │   │   │   │   │   │   │   │
-0   1   2   3   4   5   6   7   8   9
+        ::
 
-                          ╱╲
-                         ╱  ╲
-                        ╱0000╲
-                       ╱╲    ╱╲
-                      ╱  ╲  ╱  ╲
-                     ╱0000╲╱0000╲
-                    ╱╲    ╱╲    ╱╲
-                   ╱  ╲  ╱  ╲  ╱  ╲
-                  ╱0000╲╱0000╲╱0000╲
-                 ╱╲    ╱╲    ╱╲    ╱╲
-                ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-               ╱0000╲╱0000╲╱0000╲╱0000╲
-              ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-             ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-            ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-           ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-          ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-         ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-        ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-       ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-      ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-     ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-    ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-   ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-  ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
- ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-│     │     │     │     │     │     │     │     │     │
-0     1     2     3     4     5     6     7     8     9
+                             ╳
+                            ╱ ╲
+                           ╳000╳
+                          ╱ ╲ ╱ ╲
+                         ╳000╳000╳
+                        ╱ ╲ ╱ ╲ ╱ ╲
+                       ╳000╳000╳000╳
+                      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+                     ╳000╳000╳000╳000╳
+                    ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+                   ╳000╳000╳000╳000╳000╳
+                  ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+                 ╳000╳000╳000╳000╳000╳000╳
+                ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+               ╳000╳000╳000╳000╳000╳000╳000╳
+              ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+             ╳000╳000╳000╳000╳000╳000╳000╳000╳
+             │   │   │   │   │   │   │   │   │
+             0   1   2   3   4   5   6   7   8
+
+        ::
+
+                             ╱╲
+                            ╱00╲
+                           ╱╲  ╱╲
+                          ╱00╲╱00╲
+                         ╱╲  ╱╲  ╱╲
+                        ╱00╲╱00╲╱00╲
+                       ╱╲  ╱╲  ╱╲  ╱╲
+                      ╱00╲╱00╲╱00╲╱00╲
+                     ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+                    ╱00╲╱00╲╱00╲╱00╲╱00╲
+                   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+                  ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
+                 ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+                ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
+               ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+              ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
+             ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+            ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
+            │   │   │   │   │   │   │   │   │   │
+            0   1   2   3   4   5   6   7   8   9
+
+        ::
+
+                                      ╱╲
+                                     ╱  ╲
+                                    ╱0000╲
+                                   ╱╲    ╱╲
+                                  ╱  ╲  ╱  ╲
+                                 ╱0000╲╱0000╲
+                                ╱╲    ╱╲    ╱╲
+                               ╱  ╲  ╱  ╲  ╱  ╲
+                              ╱0000╲╱0000╲╱0000╲
+                             ╱╲    ╱╲    ╱╲    ╱╲
+                            ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+                           ╱0000╲╱0000╲╱0000╲╱0000╲
+                          ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
+                         ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+                        ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
+                       ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
+                      ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+                     ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
+                    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
+                   ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+                  ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
+                 ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
+                ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+               ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
+              ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
+             ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
+            ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
+            │     │     │     │     │     │     │     │     │     │
+            0     1     2     3     4     5     6     7     8     9
         """
         # get function to convert values to strings
         if str_func is None:
