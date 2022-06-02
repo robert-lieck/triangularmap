@@ -9,17 +9,9 @@ Welcome to TriangularMap's documentation!
 
    api_summary
 
-.. ...add more elements to table of contents
-
-Code examples are automatically tested
-
-   >>> print("Hello World")
-   Hello World
-
-
 .. autoclass:: triangularmap.tmap.TMap
    :members:
-
+   :noindex:
 
 .. Indices and tables
 .. ==================
