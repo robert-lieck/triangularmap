@@ -65,7 +65,7 @@ class TMap:
             self.setter(key, value)
 
     @classmethod
-    def to_int(cls, i):
+    def _to_int(cls, i):
         """
         Convert i to integer, no matter whether it is a single number or a numpy array.
 
@@ -80,18 +80,19 @@ class TMap:
     @classmethod
     def size1d_from_n(cls, n):
         """
-        Calculate the size N of the underlying 1D array for a given width n of the triangular map: N = n * (n + 1)) / 2.
-        This function also works with arrays.
+        Calculate the size `N` of the underlying 1D array for a given width ``n`` of the triangular map:
+        :math:`N = n (n + 1)) / 2`. This function also works with arrays.
 
         :param n: Width (number of entries at the bottom of the map)
         :return: Length of underlying 1D array (total number of entries in the map)
         """
-        return cls.to_int((n * (n + 1)) / 2)
+        return cls._to_int((n * (n + 1)) / 2)
 
     @classmethod
     def n_from_size1d(cls, n):
         """
-        Calculate width n of the map given the size N of the underlying 1D array: n = (sqrt(8 * N + 1) - 1) / 2.
+        Calculate width ``n`` of the map given the size `N` of the underlying 1D array:
+        :math:`n = (\sqrt{8 * N + 1} - 1) / 2`.
         Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.
         This function also works with arrays.
 
@@ -101,10 +102,18 @@ class TMap:
         n_ = (np.sqrt(8 * n + 1) - 1) / 2
         if cls.size1d_from_n(np.floor(n_)) != n:
             raise ValueError(f"{n} is not a valid size for a triangular map (n={n_})")
-        return cls.to_int(np.floor(n_))
+        return cls._to_int(np.floor(n_))
 
     @classmethod
-    def get_reindex_top_down_from_start_end(cls, n):
+    def get_reindex_from_start_end_to_top_down(cls, n):
+        """
+        For a map of width ``n``, get an index array of length :math:`n (n + 1)) / 2` to reindex from start-end order to
+        top-down order. This is used in :func:`~triangularmap.TMap.reindex_from_start_end_to_top_down`
+        to perform the reindexing.
+
+        :param n: width of map
+        :return: index array of length :math:`n (n + 1)) / 2`
+        """
         n_elem = np.arange(n + 1)
         idx_shift = n * (n + 1) // 2 - np.flip(n_elem * (n_elem + 1) // 2)
         index_list = []
@@ -113,12 +122,58 @@ class TMap:
         return np.concatenate(index_list)
 
     @classmethod
-    def reindex_top_down_from_start_end(cls, arr):
+    def reindex_from_start_end_to_top_down(cls, arr):
+        """
+        Reindex ``arr`` from start-end order to top-down order.
+
+        :param arr: linear array in start-end order
+        :return: linear array in top-down order
+
+        Given a linear array `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`, assuming start-end order translates to the triangular
+        map:
+
+        ::
+
+                    ╱╲
+                   ╱ 3╲
+                  ╱╲  ╱╲
+                 ╱ 2╲╱ 6╲
+                ╱╲  ╱╲  ╱╲
+               ╱ 1╲╱ 5╲╱ 8╲
+              ╱╲  ╱╲  ╱╲  ╱╲
+             ╱ 0╲╱ 4╲╱ 7╲╱ 9╲
+
+        Assuming top-down order translates into:
+
+        ::
+
+                    ╱╲
+                   ╱ 0╲
+                  ╱╲  ╱╲
+                 ╱ 1╲╱ 2╲
+                ╱╲  ╱╲  ╱╲
+               ╱ 3╲╱ 4╲╱ 5╲
+              ╱╲  ╱╲  ╱╲  ╱╲
+             ╱ 6╲╱ 7╲╱ 8╲╱ 9╲
+
+        Applying :func:`~triangularmap.TMap.reindex_from_start_end_to_top_down` to the array
+        `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]` reorders it to `[3, 2, 6, 1, 5, 8, 0, 4, 7, 9]`, so that the upper
+        triangular map is produced using the lower ordering principle. This is the inverse function of
+        :func:`~triangularmap.TMap.reindex_from_top_down_to_start_end`.
+        """
         n = TMap.n_from_size1d(arr.shape[0])
-        return arr[cls.get_reindex_top_down_from_start_end(n)]
+        return arr[cls.get_reindex_from_start_end_to_top_down(n)]
 
     @classmethod
-    def get_reindex_start_end_from_top_down(cls, n):
+    def get_reindex_from_top_down_to_start_end(cls, n):
+        """
+        For a map of width ``n``, get an index array of length :math:`n (n + 1)) / 2` to reindex from top-down order to
+        start-end order. This is used in :func:`~triangularmap.TMap.reindex_from_top_down_to_start_end`
+        to perform the reindexing.
+
+        :param n: width of map
+        :return: index array of length :math:`n (n + 1)) / 2`
+        """
         n_elem = np.arange(n + 1)
         sum_elem = n_elem * (n_elem + 1) // 2
         index_list = []
@@ -127,9 +182,47 @@ class TMap:
         return np.concatenate(index_list)
 
     @classmethod
-    def reindex_start_end_from_top_down(cls, arr):
+    def reindex_from_top_down_to_start_end(cls, arr):
+        """
+        Reindex ``arr`` from top-down order to start-end order.
+
+        :param arr: linear array in top-down order
+        :return: linear array in start-end order
+
+        Given a linear array `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`, assuming top-down order translates to the triangular
+        map:
+
+        ::
+
+                    ╱╲
+                   ╱ 0╲
+                  ╱╲  ╱╲
+                 ╱ 1╲╱ 2╲
+                ╱╲  ╱╲  ╱╲
+               ╱ 3╲╱ 4╲╱ 5╲
+              ╱╲  ╱╲  ╱╲  ╱╲
+             ╱ 6╲╱ 7╲╱ 8╲╱ 9╲
+
+        Assuming start-end order translates into:
+
+        ::
+
+                    ╱╲
+                   ╱ 3╲
+                  ╱╲  ╱╲
+                 ╱ 2╲╱ 6╲
+                ╱╲  ╱╲  ╱╲
+               ╱ 1╲╱ 5╲╱ 8╲
+              ╱╲  ╱╲  ╱╲  ╱╲
+             ╱ 0╲╱ 4╲╱ 7╲╱ 9╲
+
+        Applying :func:`~triangularmap.TMap.reindex_from_top_down_to_start_end` to the array
+        `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]` reorders it to `[6, 3, 1, 0, 7, 4, 2, 8, 5, 9]`, so that the upper
+        triangular map is produced using the lower ordering principle. This is the inverse function of
+        :func:`~triangularmap.TMap.reindex_from_start_end_to_top_down`
+        """
         n = TMap.n_from_size1d(arr.shape[0])
-        return arr[cls.get_reindex_start_end_from_top_down(n)]
+        return arr[cls.get_reindex_from_top_down_to_start_end(n)]
 
     def __init__(self, arr, linearise_blocks=False):
         self.n = self.n_from_size1d(len(arr))
@@ -170,7 +263,7 @@ class TMap:
         :param end: end index or array of indices
         :return: depth or array of depth values
         """
-        return self.to_int(self.n - (end - start))
+        return self._to_int(self.n - (end - start))
 
     def level(self, *args):
         """
@@ -200,7 +293,7 @@ class TMap:
         """
         depth = self.depth(start, end)
         level = self.level(depth)
-        return self.to_int(depth * (depth + 1) / 2 + end - level)
+        return self._to_int(depth * (depth + 1) / 2 + end - level)
 
     def __getitem__(self, item):
         """
@@ -554,8 +647,11 @@ class TMap:
                 s += "]"
         return s
 
-    def pretty(self, cut=None, str_func=None, detach_pytorch=True, scf=None, pos=None, rnd=None):
+    def pretty(self, cut=None, str_func=None, detach_pytorch=True, scf=None, pos=None, rnd=None,
+               align='r', crosses=False, fill_char=" ", pad_char=" ", top_char=" ", bottom_char=" ",
+               fill_lines=True, haxis=False, daxis=False, laxis=False):
         """
+        Pretty-print a triangular map. See the gallery for usage examples.
 
         :param cut: cut at specified level, printing only the bottom 'cut' levels of the map
         :param str_func: function to convert values to strings (default: str)
@@ -563,100 +659,23 @@ class TMap:
         :param scf: kwargs to use np.format_float_scientific to format value
         :param pos: kwargs to use np.format_float_positional to format value
         :param rnd: kwargs to use np.around to format value
+        :param align: right-align ('r') or left-align ('l') content within cells
+        :param crosses: use a different style for plotting the triangular map
+        :param fill_char: character used for indenting lines (and filling lines; see ``fill_lines``)
+        :param pad_char: character used for padding content (left or right; depending on ``align``)
+        :param top_char: character used to fill remaining space at the top within cells
+        :param bottom_char: character used to fill remaining space at the bottom within cells
+        :param fill_lines: whether to fill lines to same length on the right side
+        :param haxis: plot a horizontal axis with ticks and tick labels
+        :param daxis: plot a depth axis on the right (not compatible with 'laxis')
+        :param laxis: plot a level axis on the right (not compatible with 'daxis')
         :return: pretty-printed string
-
-        ::
-
-                     ╳
-                    ╳0╳
-                   ╳0╳0╳
-                  ╳0╳0╳0╳
-                 ╳0╳0╳0╳0╳
-                ╳0╳0╳0╳0╳0╳
-               ╳0╳0╳0╳0╳0╳0╳
-              ╳0╳0╳0╳0╳0╳0╳0╳
-             ╳0╳0╳0╳0╳0╳0╳0╳0╳
-            ╳0╳0╳0╳0╳0╳0╳0╳0╳0╳
-            │ │ │ │ │ │ │ │ │ │
-            0 1 2 3 4 5 6 7 8 9
-
-        ::
-
-                             ╳
-                            ╱ ╲
-                           ╳000╳
-                          ╱ ╲ ╱ ╲
-                         ╳000╳000╳
-                        ╱ ╲ ╱ ╲ ╱ ╲
-                       ╳000╳000╳000╳
-                      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-                     ╳000╳000╳000╳000╳
-                    ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-                   ╳000╳000╳000╳000╳000╳
-                  ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-                 ╳000╳000╳000╳000╳000╳000╳
-                ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-               ╳000╳000╳000╳000╳000╳000╳000╳
-              ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
-             ╳000╳000╳000╳000╳000╳000╳000╳000╳
-             │   │   │   │   │   │   │   │   │
-             0   1   2   3   4   5   6   7   8
-
-        ::
-
-                             ╱╲
-                            ╱00╲
-                           ╱╲  ╱╲
-                          ╱00╲╱00╲
-                         ╱╲  ╱╲  ╱╲
-                        ╱00╲╱00╲╱00╲
-                       ╱╲  ╱╲  ╱╲  ╱╲
-                      ╱00╲╱00╲╱00╲╱00╲
-                     ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-                    ╱00╲╱00╲╱00╲╱00╲╱00╲
-                   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-                  ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-                 ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-                ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-               ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-              ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-             ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
-            ╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲╱00╲
-            │   │   │   │   │   │   │   │   │   │
-            0   1   2   3   4   5   6   7   8   9
-
-        ::
-
-                                      ╱╲
-                                     ╱  ╲
-                                    ╱0000╲
-                                   ╱╲    ╱╲
-                                  ╱  ╲  ╱  ╲
-                                 ╱0000╲╱0000╲
-                                ╱╲    ╱╲    ╱╲
-                               ╱  ╲  ╱  ╲  ╱  ╲
-                              ╱0000╲╱0000╲╱0000╲
-                             ╱╲    ╱╲    ╱╲    ╱╲
-                            ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-                           ╱0000╲╱0000╲╱0000╲╱0000╲
-                          ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-                         ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-                        ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-                       ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-                      ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-                     ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-                    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-                   ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-                  ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-                 ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-                ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-               ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-              ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲    ╱╲
-             ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲  ╱  ╲
-            ╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲╱0000╲
-            │     │     │     │     │     │     │     │     │     │
-            0     1     2     3     4     5     6     7     8     9
         """
+        if daxis and laxis:
+            raise ValueError("Only one of 'daxis' and 'laxis' may be true.")
+        # if depth axis is used, lines have to be filled
+        if daxis:
+            fill_lines = True
         # get function to convert values to strings
         if str_func is None:
             if scf is not None:
@@ -697,17 +716,42 @@ class TMap:
                 str_val = str_func(val)
                 max_width = max(max_width, len(str_val))
                 str_slices[-1].append(str_val)
-        # width must be even
-        max_width = int(2 * np.ceil(max_width / 2))
+        # get maximum width to use for all elements
+        if crosses:
+            # width must be uneven
+            max_width = int(2 * np.floor(max_width / 2)) + 1
+        else:
+            # width must be even
+            max_width = int(2 * np.ceil(max_width / 2))
         # adjust width
         for sl_idx, sl in enumerate(str_slices):
             for idx, str_val in enumerate(sl):
-                str_slices[sl_idx][idx] = str_val.rjust(max_width)
+                if align == 'r':
+                    str_slices[sl_idx][idx] = str_val.rjust(max_width, pad_char)
+                elif align == 'l':
+                    str_slices[sl_idx][idx] = str_val.ljust(max_width, pad_char)
+                else:
+                    raise ValueError(f"'align' has to be 'l' or 'r' but is '{align}'")
         # for x in str_slices:
         #     print(x)
         # generate triangular matrix
-        lines_per_level = (max_width - 1) // 2 + 2
+        if crosses:
+            lines_per_level = (max_width - 1) // 2 + 1
+        else:
+            lines_per_level = (max_width - 1) // 2 + 2
         s = ""
+        # add top for cross-style
+        if crosses and cut is None:
+            depth_indent = fill_char * lines_per_level * (self.n - 1)
+            line_indent = fill_char * (lines_per_level - 1)
+            s += depth_indent + line_indent + fill_char + "╳"
+            if fill_lines:
+                s += fill_char + line_indent + depth_indent
+            # add depth axis label
+            if daxis:
+                s += " depth"
+            if laxis:
+                s += " level"
         for depth, sl in enumerate(str_slices):
             # level corresponding to depth
             level = self.level(depth)
@@ -715,18 +759,53 @@ class TMap:
             if cut is not None and level > cut:
                 continue
             # base indentation of this slice
-            depth_indent = " " * lines_per_level * (level - 1)
+            depth_indent = fill_char * lines_per_level * (level - 1)
+            # add lines to draw structure
             for line in range(lines_per_level - 1):
-                # newline exept for first line
+                # additional indent for this line of slice
+                line_indent = fill_char * (lines_per_level - line - 1)
+                # newline if not empty
                 if s:
                     s += "\n"
-                # additional indent for this line of slice
-                line_indent = " " * (lines_per_level - line - 1)
                 # spacing within and in between cells
-                within_cell_spacing = " " * 2 * line
-                in_between_cell_spacing = " " * 2 * (lines_per_level - line - 1)
+                if crosses:
+                    within_cell_spacing = top_char * (2 * line + 1)
+                    in_between_cell_spacing = bottom_char * (2 * (lines_per_level - line - 1) - 1)
+                else:
+                    within_cell_spacing = top_char * 2 * line
+                    in_between_cell_spacing = bottom_char * 2 * (lines_per_level - line - 1)
                 # add indentation
                 s += depth_indent + line_indent
                 s += ("╱" + within_cell_spacing + "╲" + in_between_cell_spacing) * depth + "╱" + within_cell_spacing + "╲"
-            s += "\n" + depth_indent + "╱" + "╲╱".join(sl) + "╲"
+                if fill_lines:
+                    s += line_indent + depth_indent
+                # add depth axis label
+                if not crosses and depth == 0 and line == 0:
+                    if daxis:
+                        s += " depth"
+                    if laxis:
+                        s += " level"
+            # add line with actual content
+            if crosses:
+                s += "\n" + depth_indent + "╳" + "╳".join(sl) + "╳"
+            else:
+                s += "\n" + depth_indent + "╱" + "╲╱".join(sl) + "╲"
+            # fill lines
+            if fill_lines:
+                s += depth_indent
+            # add depth axis
+            if daxis:
+                s += f" {depth}"
+            if laxis:
+                s += f" {level}"
+        if haxis:
+            if crosses:
+                tick_spacing = max_width
+            else:
+                tick_spacing = max_width + 1
+            just_width = tick_spacing + 1
+            n = len(str_slices[-1])
+            a = [str(x).ljust(just_width) for x in range(n + 1)]
+            s += "\n" + ("│" + " " * tick_spacing) * n + "│"
+            s += "\n" + "".join(a)
         return s
