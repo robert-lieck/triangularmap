@@ -35,6 +35,9 @@ extensions = [
     'sphinx_autodoc_typehints',
     'autoclasstoc',
     'sphinx.ext.viewcode',
+    'sphinx.ext.imgmath',
+    'sphinx_gallery.gen_gallery',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,3 +61,6 @@ html_show_sourcelink = False  # don't show the "View page source" link in the RT
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# use svg in imgmath extension
+imgmath_image_format='svg'
