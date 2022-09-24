@@ -15,7 +15,7 @@ This example shows typical usages of the :func:`~tmap.TMap.pretty` function.
 from triangularmap import TMap
 
 n = 6
-arr = list(range(TMap.size1d_from_n(n)))
+arr = list(range(TMap.size_from_n(n)))
 tmap = TMap(arr)
 
 # %%
@@ -70,4 +70,4 @@ print(TMap('abcdefghij').pretty())
 # content is only one character wide (in more extreme cases, they may even become misaligned if there is not enough
 # space):
 
-print(TMap('.' * TMap.size1d_from_n(15)).pretty(crosses=True, daxis=True, haxis=True))
+print(TMap('.' * TMap.size_from_n(15)).pretty(crosses=True, daxis=True, haxis=True))

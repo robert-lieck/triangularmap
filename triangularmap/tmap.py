@@ -50,6 +50,10 @@ class TMap:
 
     flatten_regex = re.compile("^(?P<outer_sign>[+-]?)(?P<outer>[sel])(?P<inner_sign>[+-]?)(?P<inner>[sel])$")
 
+    class UnDef:
+        """Class to indicate undefined indices"""
+        pass
+
     class GetSetWrapper:
         """
         Wrapper class that delegates __getitem__ and __setitem__ to custom functions
@@ -78,7 +82,14 @@ class TMap:
             return int(i)
 
     @classmethod
-    def size1d_from_n(cls, n):
+    def _unpack_item(cls, item):
+        if isinstance(item, tuple):
+            return item[0], item[1:]
+        else:
+            return item, cls.UnDef
+
+    @classmethod
+    def size_from_n(cls, n):
         """
         Calculate the size `N` of the underlying 1D array for a given width ``n`` of the triangular map:
         :math:`N = n (n + 1)) / 2`. This function also works with arrays.
@@ -89,10 +100,10 @@ class TMap:
         return cls._to_int((n * (n + 1)) / 2)
 
     @classmethod
-    def n_from_size1d(cls, n):
+    def n_from_size(cls, n):
         """
         Calculate width ``n`` of the map given the size `N` of the underlying 1D array:
-        :math:`n = (\sqrt{8 * N + 1} - 1) / 2`.
+        :math:`n = (\\sqrt{8 * N + 1} - 1) / 2`.
         Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.
         This function also works with arrays.
 
@@ -100,7 +111,7 @@ class TMap:
         :return: width of the map
         """
         n_ = (np.sqrt(8 * n + 1) - 1) / 2
-        if cls.size1d_from_n(np.floor(n_)) != n:
+        if cls.size_from_n(np.floor(n_)) != n:
             raise ValueError(f"{n} is not a valid size for a triangular map (n={n_})")
         return cls._to_int(np.floor(n_))
 
@@ -161,7 +172,7 @@ class TMap:
         triangular map is produced using the lower ordering principle. This is the inverse function of
         :func:`~triangularmap.TMap.reindex_from_top_down_to_start_end`.
         """
-        n = TMap.n_from_size1d(arr.shape[0])
+        n = TMap.n_from_size(arr.shape[0])
         return arr[cls.get_reindex_from_start_end_to_top_down(n)]
 
     @classmethod
@@ -221,21 +232,66 @@ class TMap:
         triangular map is produced using the lower ordering principle. This is the inverse function of
         :func:`~triangularmap.TMap.reindex_from_start_end_to_top_down`
         """
-        n = TMap.n_from_size1d(arr.shape[0])
+        n = TMap.n_from_size(arr.shape[0])
         return arr[cls.get_reindex_from_top_down_to_start_end(n)]
 
     def __init__(self, arr, linearise_blocks=False):
-        self.n = self.n_from_size1d(len(arr))
-        self.arr = arr
+        self._n = self.n_from_size(len(arr))
+        self._arr = arr
         try:
-            self.value_shape = self.arr.shape[1:]
+            self._value_shape = self._arr.shape[1:]
         except AttributeError:
-            self.value_shape = ()
-        self.linearise_blocks = linearise_blocks
-        self.sslice = TMap.GetSetWrapper(getter=self.get_sslice, setter=self.set_sslice)
-        self.eslice = TMap.GetSetWrapper(getter=self.get_eslice, setter=self.set_eslice)
-        self.sblock = TMap.GetSetWrapper(getter=self.get_sblock, setter=self.set_sblock)
-        self.eblock = TMap.GetSetWrapper(getter=self.get_eblock, setter=self.set_eblock)
+            self._value_shape = ()
+        self._linearise_blocks = linearise_blocks
+        self._lslice = TMap.GetSetWrapper(getter=self.get_lslice, setter=self.set_lslice)
+        self._dslice = TMap.GetSetWrapper(getter=self.get_dslice, setter=self.set_dslice)
+        self._sslice = TMap.GetSetWrapper(getter=self.get_sslice, setter=self.set_sslice)
+        self._eslice = TMap.GetSetWrapper(getter=self.get_eslice, setter=self.set_eslice)
+        self._sblock = TMap.GetSetWrapper(getter=self.get_sblock, setter=self.set_sblock)
+        self._eblock = TMap.GetSetWrapper(getter=self.get_eblock, setter=self.set_eblock)
+
+    @property
+    def n(self):
+        return self._n
+
+    @property
+    def arr(self):
+        return self._arr
+
+    @property
+    def value_shape(self):
+        return self._value_shape
+
+    @property
+    def linearise_blocks(self):
+        return self._linearise_blocks
+
+    @property
+    def lslice(self):
+        return self._lslice
+
+    @property
+    def dslice(self):
+        return self._dslice
+
+    @property
+    def sslice(self):
+        return self._sslice
+
+    @property
+    def eslice(self):
+        return self._eslice
+
+    @property
+    def sblock(self):
+        return self._sblock
+
+    @property
+    def eblock(self):
+        return self._eblock
+
+    def _is_pytorch(self):
+        return isinstance(self.arr, torch.Tensor)
 
     def _check(self, start, end):
         """
@@ -308,7 +364,7 @@ class TMap:
             # function to concatenate slices
             if isinstance(self.arr, np.ndarray):
                 cat = np.concatenate
-            elif isinstance(self.arr, torch.Tensor):
+            elif self._is_pytorch():
                 cat = torch.cat
             else:
                 cat = lambda ls: sum(ls, [])
@@ -319,7 +375,7 @@ class TMap:
             start_depth = self.depth(start, end)
             # get new array of sub-map by concatenating slices
             arr_tuple = tuple(
-                self.dslice(d)[slice(start, start + (d - start_depth) + 1, step)] for d in range(start_depth, self.n)
+                self.dslice[d][slice(start, start + (d - start_depth) + 1, step)] for d in range(start_depth, self.n)
             )
             arr = cat(arr_tuple)
             # return new TMap
@@ -353,7 +409,7 @@ class TMap:
         """
         if isinstance(self.arr, np.ndarray):
             copy = self.arr.copy()
-        elif isinstance(self.arr, torch.Tensor):
+        elif self._is_pytorch():
             copy = self.arr.detach().clone()
         elif isinstance(self.arr, list):
             copy = list(self.arr)
@@ -389,7 +445,7 @@ class TMap:
         linear_end = self.linear_from_start_end(self.n - level, self.n)
         return linear_start, linear_end
 
-    def lslice(self, level):
+    def get_lslice(self, level):
         """
         Slice the map at the given level, returning a view of the values.
 
@@ -399,14 +455,23 @@ class TMap:
         linear_start, linear_end = self.linear_start_end_from_level(level)
         return self.arr[linear_start:linear_end + 1]
 
-    def dslice(self, depth):
+    def set_lslice(self, level, value):
+        linear_start, linear_end = self.linear_start_end_from_level(level)
+        self.arr[linear_start:linear_end + 1] = value
+
+    def get_dslice(self, depth):
         """
         Slice the map at the given depth, returning a view of the values.
 
         :param depth: depth to use for slicing
         :return: view of the values
         """
-        return self.lslice(self.level(depth))
+        linear_start, linear_end = self.linear_start_end_from_level(self.level(depth))
+        return self.arr[linear_start:linear_end + 1]
+
+    def set_dslice(self, depth, value):
+        linear_start, linear_end = self.linear_start_end_from_level(self.level(depth))
+        self.arr[linear_start:linear_end + 1] = value
 
     def end_indices_for_sslice(self, start):
         """
@@ -434,26 +499,20 @@ class TMap:
         :param item: start index or tuple of start index and additional indices/slices
         :return: copy of slice at start index
         """
-        if isinstance(item, tuple):
-            start = item[0]
-            s = item[1:]
-            end_indices = self.end_indices_for_sslice(start)[s]
-        else:
-            start = item
-            end_indices = self.end_indices_for_sslice(start)
+        start, s = self._unpack_item(item)
+        end_indices = self.end_indices_for_sslice(start)
+        if s is not self.UnDef:
+            end_indices = end_indices[s]
         return self[start, end_indices]
 
     def set_sslice(self, key, value):
         """
         Like get_sslice but set value instead of returning values.
         """
-        if isinstance(key, tuple):
-            start = key[0]
-            s = key[1:]
-            end_indices = self.end_indices_for_sslice(start)[s]
-        else:
-            start = key
-            end_indices = self.end_indices_for_sslice(start)
+        start, s = self._unpack_item(key)
+        end_indices = self.end_indices_for_sslice(start)
+        if s is not self.UnDef:
+            end_indices = end_indices[s]
         self[start, end_indices] = value
 
     def get_eslice(self, item):
@@ -464,37 +523,25 @@ class TMap:
         :param item: end index or tuple of end index and additional indices/slices
         :return: copy of slice at end index
         """
-        if isinstance(item, tuple):
-            end = item[0]
-            s = item[1:]
-            start_indices = self.start_indices_for_eslice(end)[s]
-        else:
-            end = item
-            start_indices = self.start_indices_for_eslice(end)
+        end, s = self._unpack_item(item)
+        start_indices = self.start_indices_for_eslice(end)
+        if s is not self.UnDef:
+            start_indices = start_indices[s]
         return self[start_indices, end]
 
     def set_eslice(self, key, value):
         """
         Like get_eslice but set value instead of returning values.
         """
-        if isinstance(key, tuple):
-            end = key[0]
-            s = key[1:]
-            start_indices = self.start_indices_for_eslice(end)[s]
-        else:
-            end = key
-            start_indices = self.start_indices_for_eslice(end)
+        end, s = self._unpack_item(key)
+        start_indices = self.start_indices_for_eslice(end)
+        if s is not self.UnDef:
+            start_indices = start_indices[s]
         self[start_indices, end] = value
 
-    def get_sblock(self, item):
-        """
-        Return a block of sslices down from the specified level.
-        """
-        if isinstance(item, tuple):
-            level = item[0]
-            s = item[1:]
-        else:
-            level = item
+    def _get_sblock_index(self, item):
+        level, s = self._unpack_item(item)
+        if s is self.UnDef:
             s = (slice(None), slice(None))
         start_indices = np.arange(0, self.n - level + 1)
         end_indices = np.concatenate(
@@ -505,6 +552,16 @@ class TMap:
         linear_indices = self.linear_from_start_end(start_indices, end_indices)[s]
         if self.linearise_blocks:
             index = (linear_indices.flatten(),) + tuple([slice(None)] * len(self.value_shape))
+            return linear_indices, index
+        else:
+            return linear_indices, self.UnDef
+
+    def get_sblock(self, item):
+        """
+        Return a block of sslices down from the specified level.
+        """
+        linear_indices, index = self._get_sblock_index(item)
+        if self.linearise_blocks:
             return self.arr[index].reshape(linear_indices.shape + self.value_shape)
         else:
             return self.arr[linear_indices]
@@ -513,34 +570,15 @@ class TMap:
         """
         Like get_sblock but set value.
         """
-        if isinstance(key, tuple):
-            level = key[0]
-            s = key[1:]
-        else:
-            level = key
-            s = (slice(None), slice(None))
-        start_indices = np.arange(0, self.n - level + 1)
-        end_indices = np.concatenate(
-            [np.flip(self.end_indices_for_sslice(start)[:level, None], axis=0) for start in start_indices],
-            axis=1
-        )
-        start_indices = start_indices[None, :]
-        linear_indices = self.linear_from_start_end(start_indices, end_indices)[s]
+        linear_indices, index = self._get_sblock_index(key)
         if self.linearise_blocks:
-            index = (linear_indices.flatten(),) + tuple([slice(None)] * len(self.value_shape))
             self.arr[index] = value
         else:
             self.arr[linear_indices] = value
 
-    def get_eblock(self, item):
-        """
-        Return a block of eslices down from the specified level.
-        """
-        if isinstance(item, tuple):
-            level = item[0]
-            s = item[1:]
-        else:
-            level = item
+    def _get_eblock_index(self, item):
+        level, s = self._unpack_item(item)
+        if s is self.UnDef:
             s = (slice(None), slice(None))
         end_indices = np.arange(level, self.n + 1)
         start_indices = np.concatenate(
@@ -551,6 +589,16 @@ class TMap:
         linear_indices = self.linear_from_start_end(start_indices, end_indices)[s]
         if self.linearise_blocks:
             index = (linear_indices.flatten(),) + tuple([slice(None)] * len(self.value_shape))
+            return linear_indices, index
+        else:
+            return linear_indices, self.UnDef
+
+    def get_eblock(self, item):
+        """
+        Return a block of eslices down from the specified level.
+        """
+        linear_indices, index = self._get_eblock_index(item)
+        if self.linearise_blocks:
             return self.arr[index].reshape(linear_indices.shape + self.value_shape)
         else:
             return self.arr[linear_indices]
@@ -559,21 +607,8 @@ class TMap:
         """
         Like get_sblock but set value.
         """
-        if isinstance(key, tuple):
-            level = key[0]
-            s = key[1:]
-        else:
-            level = key
-            s = (slice(None), slice(None))
-        end_indices = np.arange(level, self.n + 1)
-        start_indices = np.concatenate(
-            [self.start_indices_for_eslice(end)[-level:, None] for end in end_indices],
-            axis=1
-        )
-        end_indices = end_indices[None, :]
-        linear_indices = self.linear_from_start_end(start_indices, end_indices)[s]
+        linear_indices, index = self._get_eblock_index(key)
         if self.linearise_blocks:
-            index = (linear_indices.flatten(),) + tuple([slice(None)] * len(self.value_shape))
             self.arr[index] = value
         else:
             self.arr[linear_indices] = value
@@ -610,7 +645,7 @@ class TMap:
         else:
             assert outer_dim == 'l', outer_dim
             for level in range(1, self.n + 1):
-                slices.append(self.lslice(level))
+                slices.append(self.lslice[level])
         # adjust sign for outer dimension
         if outer_sign == '-':
             slices = reversed(slices)
@@ -618,11 +653,14 @@ class TMap:
             assert not outer_sign or outer_sign == '+', outer_sign
         # adjust sign for inner dimension
         if inner_sign == '-':
-            slices = [np.flip(s) for s in slices]
+            if self._is_pytorch():
+                slices = [torch.flip(s, dims=(0,)) for s in slices]
+            else:
+                slices = [np.flip(s, axis=0) for s in slices]
         else:
             assert not inner_sign or inner_sign == '+', inner_sign
         # concatenate and return
-        if isinstance(self.arr, torch.Tensor):
+        if self._is_pytorch():
             return torch.cat(tuple(slices))
         else:
             return np.concatenate(tuple(slices))
@@ -632,14 +670,14 @@ class TMap:
 
     def __str__(self):
         """
-        Return a string representation of the map, consisting of consecutive dsclices.
+        Return a string representation of the map, consisting of consecutive dslices.
         """
         s = ""
         for depth in range(self.n):
             if s:
                 s += "\n"
             try:
-                s += str(self.dslice(depth))
+                s += str(self.dslice[depth])
             except TypeError:
                 s += "["
                 linear_start, linear_end = self.linear_start_end_from_level(self.level(depth))
@@ -686,20 +724,14 @@ class TMap:
                     return np.format_float_positional(val, **pos)
             elif rnd is not None:
                 def str_func(val):
+                    # when decimals is less or equal to zero (i.e. rounding to whole numbers)
+                    # convert to integers for more compact printing
                     if rnd.setdefault("decimals", 0) <= 0:
-                        try:
-                            return str(int(np.around(val, **rnd)))
-                        except ValueError:
-                            return str(np.around(val, **rnd))
+                        return str(int(np.around(val, **rnd)))
                     else:
                         return str(np.around(val, **rnd))
             else:
                 str_func = str
-            # if isinstance(self.arr, torch.Tensor) and detach_pytorch:
-            #     def str_func(val):
-            #         return str(val.detach().numpy()[0])
-            # else:
-            #     str_func = str
         # get values as strings
         str_slices = []
         max_width = -1
@@ -710,8 +742,8 @@ class TMap:
             # cut at level
             if cut is not None and level > cut:
                 continue
-            for val in self.dslice(depth):
-                if isinstance(self.arr, torch.Tensor) and detach_pytorch:
+            for val in self.dslice[depth]:
+                if self._is_pytorch() and detach_pytorch:
                     val = val.detach().numpy()
                 str_val = str_func(val)
                 max_width = max(max_width, len(str_val))
