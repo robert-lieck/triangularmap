@@ -17,7 +17,7 @@ import numpy as np
 from triangularmap import TMap
 
 n = 4
-arr = np.array([" "] * TMap.size1d_from_n(n))
+arr = np.array([" "] * TMap.size_from_n(n))
 tmap = TMap(arr)
 
 # %%
@@ -33,13 +33,13 @@ print(tmap.pretty(haxis=True))
 # .................
 # We can also set entire rows, specified by depth
 
-tmap.dslice(2)[:] = 'o'
+tmap.dslice[2] = 'o'
 print(tmap.pretty(daxis=True))
 
 # %%
 # or level
 
-tmap.lslice(3)[:] = 'x'
+tmap.lslice[3] = 'x'
 print(tmap.pretty(laxis=True))
 
 # %%
@@ -47,7 +47,7 @@ print(tmap.pretty(laxis=True))
 # :meth:`~triangularmap.tmap.TMap.lslice` methods return a (sliced) `view` of the underlying numpy array, which allows
 # for directly assigning values. We can also slice the returned array again
 
-tmap.lslice(1)[1:3] = 'x'
+tmap.lslice[1][1:3] = 'x'
 print(tmap.pretty(laxis=True))
 
 # %%
@@ -83,7 +83,7 @@ print(tmap.pretty(haxis=True, laxis=True))
 
 # %%
 # When we now do the following
-lslice = tmap.lslice(2)
+lslice = tmap.lslice[2]
 sslice = tmap.sslice[1]
 print(lslice)
 print(sslice)

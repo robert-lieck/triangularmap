@@ -35,6 +35,9 @@ class TestTMap(TestCase):
                  "[36 37 38 39 40 41 42 43 44]\n" \
                  "[45 46 47 48 49 50 51 52 53 54]"
 
+    def to_pytorch(self, tri):
+        return TMap(torch.from_numpy(tri.arr))
+
     def get_tmap(self, n, linearise=False, multi_dim=None):
         # construct triangular map with size n
         arr = np.arange(n * (n + 1) / 2).astype(int)
@@ -42,7 +45,7 @@ class TestTMap(TestCase):
         if multi_dim is not None:
             arr = np.concatenate([arr[..., None]] * multi_dim, axis=-1)
         # double-check size
-        self.assertEqual(len(arr), TMap.size1d_from_n(n))
+        self.assertEqual(len(arr), TMap.size_from_n(n))
         # construct TMap
         tri = TMap(arr, linearise_blocks=linearise)
         # double-check layout for non-multidimensional case
@@ -59,13 +62,17 @@ class TestTMap(TestCase):
                              "[45 46 47 48 49 50 51 52 53 54]", str(tri))
         return tri
 
+    def test_repr(self):
+        tmap = self.get_tmap(3)
+        self.assertEqual(tmap.__repr__(), "TMap(n=3, [0 1 2 3 4 5], linearise_blocks=False)")
+
     def test_size(self):
         for n in np.random.randint(2, 100, 100):
-            size = TMap.size1d_from_n(n)
+            size = TMap.size_from_n(n)
             # make sure inverse operations work
-            self.assertEqual(n, TMap.n_from_size1d(size))
+            self.assertEqual(n, TMap.n_from_size(size))
             # check bad size raises
-            self.assertRaises(ValueError, lambda: TMap.n_from_size1d(size + 1))
+            self.assertRaises(ValueError, lambda: TMap.n_from_size(size + 1))
 
     def test_copy(self):
         n = 10
@@ -101,6 +108,7 @@ class TestTMap(TestCase):
         n = 10
         for n_dims in [None, 1, 2]:
             tri_n = self.get_tmap(n, multi_dim=n_dims)
+            self.assertIs(tri_n.top(), tri_n)
             for depth in range(n):
                 t = self.get_tmap(depth, multi_dim=n_dims)
                 assert_array_equal(t.arr, tri_n.top(depth).arr)
@@ -187,8 +195,8 @@ class TestTMap(TestCase):
             for level, depth, arr in zip(reversed(range(1, n + 1)), range(n), self.list_values):
                 if n_dims is not None:
                     arr = np.concatenate([np.array(arr)[:, None]] * n_dims, axis=-1)
-                assert_array_equal(arr, tri.lslice(level))
-                assert_array_equal(arr, tri.dslice(depth))
+                assert_array_equal(arr, tri.lslice[level])
+                assert_array_equal(arr, tri.dslice[depth])
 
     def test_print(self):
         n = 10
@@ -200,6 +208,7 @@ class TestTMap(TestCase):
             self.assertEqual(self.str_values, str(tri))
             # pretty print
             tmap = self.get_tmap(6)
+            self.assertRaises(ValueError, lambda: tmap.pretty(daxis=True, laxis=True))
             pretty_str = "           ╱╲           \n" \
                          "          ╱ 0╲          \n" \
                          "         ╱╲  ╱╲         \n" \
@@ -213,6 +222,7 @@ class TestTMap(TestCase):
                          " ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲ \n" \
                          "╱15╲╱16╲╱17╲╱18╲╱19╲╱20╲"
             self.assertEqual(pretty_str, tmap.pretty())
+            self.assertEqual(pretty_str, self.to_pytorch(tmap).pretty())
             pretty_str = "           ╱╲            depth\n" \
                          "          ╱ 0╲           0\n" \
                          "         ╱╲  ╱╲         \n" \
@@ -335,6 +345,46 @@ class TestTMap(TestCase):
                                                                   top_char='.',
                                                                   bottom_char='|',
                                                                   haxis=True))
+            tmap = self.get_tmap(3)
+            pretty_str = '           ╱╲           \n' \
+                         '          ╱  ╲          \n' \
+                         '         ╱    ╲         \n' \
+                         '        ╱0.e+00╲        \n' \
+                         '       ╱╲      ╱╲       \n' \
+                         '      ╱  ╲    ╱  ╲      \n' \
+                         '     ╱    ╲  ╱    ╲     \n' \
+                         '    ╱1.e+00╲╱2.e+00╲    \n' \
+                         '   ╱╲      ╱╲      ╱╲   \n' \
+                         '  ╱  ╲    ╱  ╲    ╱  ╲  \n' \
+                         ' ╱    ╲  ╱    ╲  ╱    ╲ \n' \
+                         '╱3.e+00╲╱4.e+00╲╱5.e+00╲'
+            self.assertEqual(pretty_str, tmap.pretty(scf=dict()))
+            pretty_str = '     ╱╲     \n' \
+                         '    ╱0.╲    \n' \
+                         '   ╱╲  ╱╲   \n' \
+                         '  ╱1.╲╱2.╲  \n' \
+                         ' ╱╲  ╱╲  ╱╲ \n' \
+                         '╱3.╲╱4.╲╱5.╲'
+            self.assertEqual(pretty_str, tmap.pretty(pos=dict()))
+            pretty_str = '     ╱╲     \n' \
+                         '    ╱ 0╲    \n' \
+                         '   ╱╲  ╱╲   \n' \
+                         '  ╱ 1╲╱ 2╲  \n' \
+                         ' ╱╲  ╱╲  ╱╲ \n' \
+                         '╱ 3╲╱ 4╲╱ 5╲'
+            tmap._arr = tmap.arr + 0.1
+            self.assertNotEqual(pretty_str, tmap.pretty())
+            self.assertEqual(pretty_str, tmap.pretty(rnd=dict(decimals=0)))
+            pretty_str = '        ╱╲        \n' \
+                         '       ╱  ╲       \n' \
+                         '      ╱ 0.1╲      \n' \
+                         '     ╱╲    ╱╲     \n' \
+                         '    ╱  ╲  ╱  ╲    \n' \
+                         '   ╱ 1.1╲╱ 2.1╲   \n' \
+                         '  ╱╲    ╱╲    ╱╲  \n' \
+                         ' ╱  ╲  ╱  ╲  ╱  ╲ \n' \
+                         '╱ 3.1╲╱ 4.1╲╱ 5.1╲'
+            self.assertEqual(pretty_str, tmap.pretty(rnd=dict(decimals=1)))
 
     def test_get_set_ranges_and_se_slice(self):
         n = 10
@@ -486,10 +536,11 @@ class TestTMap(TestCase):
     def test_flatten(self):
         n = 10
         for n_dims in [None, 1, 2]:
-            tri = self.get_tmap(n, multi_dim=n_dims)
+            tri_np = self.get_tmap(n, multi_dim=n_dims)
+            tri_pt = self.to_pytorch(tri_np)
             # check invalid values of order parameter
-            self.assertRaises(ValueError, lambda: tri.flatten("xyz"))
-            self.assertRaises(ValueError, lambda: tri.flatten("ss"))
+            self.assertRaises(ValueError, lambda: tri_np.flatten("xyz"))
+            self.assertRaises(ValueError, lambda: tri_np.flatten("ss"))
             # expected output values (without additional dimensions)
             # '-ls'
             level_slices = [[0],
@@ -530,32 +581,37 @@ class TestTMap(TestCase):
                     for outer_idx in range(len(exp_val_list)):
                         for inner_idx in range(len(exp_val_list[outer_idx])):
                             exp_val_list[outer_idx][inner_idx] = [exp_val_list[outer_idx][inner_idx]] * n_dims
+            # test function
+            def test(slices, *args):
+                l = list(chain(*slices))
+                assert_array_equal(l, tri_np.flatten(*args))
+                assert_array_equal(l, tri_pt.flatten(*args))
             # standard order is '-ls'
-            assert_array_equal(list(chain(*level_slices)), tri.flatten())
+            test(level_slices)
             # check level-first orders
-            assert_array_equal(list(chain(*level_slices)), tri.flatten('-ls'))
-            assert_array_equal(list(chain(*level_slices)), tri.flatten('-l+s'))
-            assert_array_equal(list(chain(*reversed(level_slices))), tri.flatten('ls'))
-            assert_array_equal(list(chain(*reversed(level_slices))), tri.flatten('+l+s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in reversed(level_slices)])), tri.flatten('l-s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in reversed(level_slices)])), tri.flatten('+l-s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in level_slices])), tri.flatten('-l-s'))
+            test(level_slices, '-ls')
+            test(level_slices, '-l+s')
+            test(reversed(level_slices), 'ls')
+            test(reversed(level_slices), '+l+s')
+            test([reversed(l) for l in reversed(level_slices)], 'l-s')
+            test([reversed(l) for l in reversed(level_slices)], '+l-s')
+            test([reversed(l) for l in level_slices], '-l-s')
             # check start-first orders
-            assert_array_equal(list(chain(*start_slices)), tri.flatten('s-e'))
-            assert_array_equal(list(chain(*start_slices)), tri.flatten('+s-e'))
-            assert_array_equal(list(chain(*reversed(start_slices))), tri.flatten('-s-e'))
-            assert_array_equal(list(chain(*[reversed(l) for l in reversed(start_slices)])), tri.flatten('-se'))
-            assert_array_equal(list(chain(*[reversed(l) for l in reversed(start_slices)])), tri.flatten('-s+e'))
-            assert_array_equal(list(chain(*[reversed(l) for l in start_slices])), tri.flatten('se'))
-            assert_array_equal(list(chain(*[reversed(l) for l in start_slices])), tri.flatten('+s+e'))
+            test(start_slices, 's-e')
+            test(start_slices, '+s-e')
+            test(reversed(start_slices), '-s-e')
+            test([reversed(l) for l in reversed(start_slices)], '-se')
+            test([reversed(l) for l in reversed(start_slices)], '-s+e')
+            test([reversed(l) for l in start_slices], 'se')
+            test([reversed(l) for l in start_slices], '+s+e')
             # check end-first orders
-            assert_array_equal(list(chain(*end_slices)), tri.flatten('es'))
-            assert_array_equal(list(chain(*end_slices)), tri.flatten('+e+s'))
-            assert_array_equal(list(chain(*reversed(end_slices))), tri.flatten('-es'))
-            assert_array_equal(list(chain(*reversed(end_slices))), tri.flatten('-e+s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in reversed(end_slices)])), tri.flatten('-e-s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in end_slices])), tri.flatten('e-s'))
-            assert_array_equal(list(chain(*[reversed(l) for l in end_slices])), tri.flatten('+e-s'))
+            test(end_slices, 'es')
+            test(end_slices, '+e+s')
+            test(reversed(end_slices), '-es')
+            test(reversed(end_slices), '-e+s')
+            test([reversed(l) for l in reversed(end_slices)], '-e-s')
+            test([reversed(l) for l in end_slices], 'e-s')
+            test([reversed(l) for l in end_slices], '+e-s')
 
     def test_reindex_top_down_start_end(self):
         seq = np.arange(10)
