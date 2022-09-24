@@ -1,3 +1,6 @@
+# PyCharm
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -70,6 +73,8 @@ instance/
 
 # Sphinx documentation
 doc/_build/
+doc/auto_examples/
+doc/_autosummary/
 
 # PyBuilder
 target/

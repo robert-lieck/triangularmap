@@ -1,6 +1,6 @@
 #  Copyright (c) 2022 Robert Lieck.
 
-from unittest import TestCase
+from unittest import TestCase, skip
 from itertools import chain
 
 import numpy as np
@@ -10,6 +10,7 @@ import torch
 from triangularmap.tmap import TMap
 
 
+# @skip("Disabled to see example coverage")
 class TestTMap(TestCase):
 
     list_values = [[0],
