@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pretty Print Example &mdash; triangularmap  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/autoclasstoc.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Usage Examples" href="plot_usage.html" />
+    <link rel="prev" title="TriangularMap Gallery" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            triangularmap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">TriangularMap Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pretty Print Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typical-use-cases">Typical Use Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#two-different-styles">Two Different Styles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plot_usage.html">Usage Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_summary.html">API Summary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">triangularmap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">TriangularMap Gallery</a></li>
+      <li class="breadcrumb-item active">Pretty Print Example</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-pretty-print-example-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="pretty-print-example">
+<span id="sphx-glr-auto-examples-plot-pretty-print-example-py"></span><h1>Pretty Print Example<a class="headerlink" href="#pretty-print-example" title="Permalink to this heading"></a></h1>
+<p>This example shows typical usages of the <code class="xref py py-func docutils literal notranslate"><span class="pre">pretty()</span></code> function.</p>
+<section id="typical-use-cases">
+<h2>Typical Use Cases<a class="headerlink" href="#typical-use-cases" title="Permalink to this heading"></a></h2>
+<p>We create a TMap of width 6</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">triangularmap</span> <span class="kn">import</span> <span class="n">TMap</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
+<span class="n">tmap</span> <span class="o">=</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and print it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲
+          ╱ 0╲
+         ╱╲  ╱╲
+        ╱ 1╲╱ 2╲
+       ╱╲  ╱╲  ╱╲
+      ╱ 3╲╱ 4╲╱ 5╲
+     ╱╲  ╱╲  ╱╲  ╱╲
+    ╱ 6╲╱ 7╲╱ 8╲╱ 9╲
+   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+  ╱10╲╱11╲╱12╲╱13╲╱14╲
+ ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+╱15╲╱16╲╱17╲╱18╲╱19╲╱20╲
+</pre></div>
+</div>
+<p>We can add a horizontal axis and a depth axis with labels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲            depth
+          ╱ 0╲           0
+         ╱╲  ╱╲
+        ╱ 1╲╱ 2╲         1
+       ╱╲  ╱╲  ╱╲
+      ╱ 3╲╱ 4╲╱ 5╲       2
+     ╱╲  ╱╲  ╱╲  ╱╲
+    ╱ 6╲╱ 7╲╱ 8╲╱ 9╲     3
+   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+  ╱10╲╱11╲╱12╲╱13╲╱14╲   4
+ ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+╱15╲╱16╲╱17╲╱18╲╱19╲╱20╲ 5
+│   │   │   │   │   │   │
+0   1   2   3   4   5   6
+</pre></div>
+</div>
+<p>or a level axis instead of the depth axis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲            level
+          ╱ 0╲           6
+         ╱╲  ╱╲
+        ╱ 1╲╱ 2╲         5
+       ╱╲  ╱╲  ╱╲
+      ╱ 3╲╱ 4╲╱ 5╲       4
+     ╱╲  ╱╲  ╱╲  ╱╲
+    ╱ 6╲╱ 7╲╱ 8╲╱ 9╲     3
+   ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+  ╱10╲╱11╲╱12╲╱13╲╱14╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲  ╱╲  ╱╲
+╱15╲╱16╲╱17╲╱18╲╱19╲╱20╲ 1
+│   │   │   │   │   │   │
+0   1   2   3   4   5   6
+</pre></div>
+</div>
+<p>We can cut of the top and specify custom characters for filling the whitespace:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill_char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">top_char</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">bottom_char</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">pad_char</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>-------╱^╲v╱^╲v╱^╲-------
+------╳003╳004╳005╳------
+-----╱^╲v╱^╲v╱^╲v╱^╲-----
+----╳006╳007╳008╳009╳----
+---╱^╲v╱^╲v╱^╲v╱^╲v╱^╲---
+--╳010╳011╳012╳013╳014╳--
+-╱^╲v╱^╲v╱^╲v╱^╲v╱^╲v╱^╲-
+╳015╳016╳017╳018╳019╳020╳
+</pre></div>
+</div>
+</section>
+<section id="two-different-styles">
+<h2>Two Different Styles<a class="headerlink" href="#two-different-styles" title="Permalink to this heading"></a></h2>
+<p>The default style uses ‘╱’ and ‘╲’ characters to draw the map. We can also use a style that additionally uses ‘╳’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>            ╳             depth
+           ╱ ╲
+          ╳  0╳           0
+         ╱ ╲ ╱ ╲
+        ╳  1╳  2╳         1
+       ╱ ╲ ╱ ╲ ╱ ╲
+      ╳  3╳  4╳  5╳       2
+     ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+    ╳  6╳  7╳  8╳  9╳     3
+   ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+  ╳ 10╳ 11╳ 12╳ 13╳ 14╳   4
+ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲
+╳ 15╳ 16╳ 17╳ 18╳ 19╳ 20╳ 5
+│   │   │   │   │   │   │
+0   1   2   3   4   5   6
+</pre></div>
+</div>
+<p>The ‘crosses’ style tends to be more compact as only one ‘╳’ is used at the crossings (instead of ‘╲╱’ or ‘╱╲’ as in
+the default style). Moreover, content is padded to fill an uneven number of characters (while in the default style it
+is padded to an even number). The crosses style is therefore particularly compact if the content itself is
+of uneven width (e.g. just a single character wide):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    ╳
+   ╳a╳
+  ╳b╳c╳
+ ╳d╳e╳f╳
+╳g╳h╳i╳j╳
+</pre></div>
+</div>
+<p>versus the default style:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
+      ╱ a╲
+     ╱╲  ╱╲
+    ╱ b╲╱ c╲
+   ╱╲  ╱╲  ╱╲
+  ╱ d╲╱ e╲╱ f╲
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱ g╲╱ h╲╱ i╲╱ j╲
+</pre></div>
+</div>
+<p>On the down-side it has a slightly more “messy” appearance (and therefore is not the default style), because there are
+no unicode character for the boundary, i.e., a ‘╳’ with one of the upper arms missing.</p>
+</section>
+<section id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this heading"></a></h2>
+<p>Plotting of the triangular map itself is not adapted to accommodate the axes, which may result in ill-formatted axes
+for some edge cases. Below, there are no spaces between two-digit tick labels on the horizontal axis, because the
+content is only one character wide (in more extreme cases, they may even become misaligned if there is not enough
+space):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;.&#39;</span> <span class="o">*</span> <span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>               ╳                depth
+              ╳.╳               0
+             ╳.╳.╳              1
+            ╳.╳.╳.╳             2
+           ╳.╳.╳.╳.╳            3
+          ╳.╳.╳.╳.╳.╳           4
+         ╳.╳.╳.╳.╳.╳.╳          5
+        ╳.╳.╳.╳.╳.╳.╳.╳         6
+       ╳.╳.╳.╳.╳.╳.╳.╳.╳        7
+      ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳       8
+     ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳      9
+    ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳     10
+   ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳    11
+  ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳   12
+ ╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳  13
+╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳.╳ 14
+│ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │
+0 1 2 3 4 5 6 7 8 9 101112131415
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.009 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-pretty-print-example-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a30453f2a685335a459b2ae022ab3704/plot_pretty_print_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pretty_print_example.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a053fd78714847962c080bab04aeb5b1/plot_pretty_print_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_pretty_print_example.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="TriangularMap Gallery" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_usage.html" class="btn btn-neutral float-right" title="Usage Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Robert Lieck.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

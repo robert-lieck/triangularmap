@@ -7,11 +7,8 @@ Welcome to TriangularMap's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   auto_examples/index.rst
    api_summary
-
-.. autoclass:: triangularmap.tmap.TMap
-   :members:
-   :noindex:
 
 .. Indices and tables
 .. ==================

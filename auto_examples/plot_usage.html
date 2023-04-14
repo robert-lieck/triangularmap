@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage Examples &mdash; triangularmap  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/autoclasstoc.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Summary" href="../api_summary.html" />
+    <link rel="prev" title="Pretty Print Example" href="plot_pretty_print_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            triangularmap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">TriangularMap Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_pretty_print_example.html">Pretty Print Example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Usage Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typical-use-cases">Typical Use Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slicing">Slicing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#horizontal-slices">Horizontal Slices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vertical-slices">Vertical Slices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_summary.html">API Summary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">triangularmap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">TriangularMap Gallery</a></li>
+      <li class="breadcrumb-item active">Usage Examples</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-usage-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="usage-examples">
+<span id="sphx-glr-auto-examples-plot-usage-py"></span><h1>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this heading"></a></h1>
+<p>This shows some common use cases of the <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> class.</p>
+<section id="typical-use-cases">
+<h2>Typical Use Cases<a class="headerlink" href="#typical-use-cases" title="Permalink to this heading"></a></h2>
+<p>We use a Numpy array as underlying storage because it allows for slicing and advanced indexing, which is used to
+provide some of the functionality.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">triangularmap</span> <span class="kn">import</span> <span class="n">TMap</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot; &quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">tmap</span> <span class="o">=</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Of course, we can set single elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
+      ╱  ╲
+     ╱╲  ╱╲
+    ╱  ╲╱ o╲
+   ╱╲  ╱╲  ╱╲
+  ╱  ╲╱  ╲╱  ╲
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱  ╲╱  ╲╱  ╲
+│   │   │   │   │
+0   1   2   3   4
+</pre></div>
+</div>
+</section>
+<section id="slicing">
+<h2>Slicing<a class="headerlink" href="#slicing" title="Permalink to this heading"></a></h2>
+<section id="horizontal-slices">
+<h3>Horizontal Slices<a class="headerlink" href="#horizontal-slices" title="Permalink to this heading"></a></h3>
+<p>We can also set entire rows, specified by depth</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">dslice</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲        depth
+      ╱  ╲       0
+     ╱╲  ╱╲
+    ╱  ╲╱ o╲     1
+   ╱╲  ╱╲  ╱╲
+  ╱ o╲╱ o╲╱ o╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱  ╲╱  ╲╱  ╲ 3
+</pre></div>
+</div>
+<p>or level</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">lslice</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲        level
+      ╱  ╲       4
+     ╱╲  ╱╲
+    ╱ x╲╱ x╲     3
+   ╱╲  ╱╲  ╱╲
+  ╱ o╲╱ o╲╱ o╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱  ╲╱  ╲╱  ╲ 1
+</pre></div>
+</div>
+<p>This syntax is required because the <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.dslice" title="triangularmap.tmap.TMap.dslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dslice()</span></code></a> and
+<a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.lslice" title="triangularmap.tmap.TMap.lslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lslice()</span></code></a> methods return a (sliced) <cite>view</cite> of the underlying numpy array, which allows
+for directly assigning values. We can also slice the returned array again</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">lslice</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲        level
+      ╱  ╲       4
+     ╱╲  ╱╲
+    ╱ x╲╱ x╲     3
+   ╱╲  ╱╲  ╱╲
+  ╱ o╲╱ o╲╱ o╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱ x╲╱ x╲╱  ╲ 1
+</pre></div>
+</div>
+<p>Let’s reset the underlying array</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">arr</span><span class="p">[:]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
+      ╱  ╲
+     ╱╲  ╱╲
+    ╱  ╲╱  ╲
+   ╱╲  ╱╲  ╱╲
+  ╱  ╲╱  ╲╱  ╲
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱  ╲╱  ╲╱  ╲
+</pre></div>
+</div>
+</section>
+<section id="vertical-slices">
+<h3>Vertical Slices<a class="headerlink" href="#vertical-slices" title="Permalink to this heading"></a></h3>
+<p>We can also use vertical slices defined by a start index</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">sslice</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
+      ╱  ╲
+     ╱╲  ╱╲
+    ╱  ╲╱ o╲
+   ╱╲  ╱╲  ╱╲
+  ╱  ╲╱ o╲╱  ╲
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱ o╲╱  ╲╱  ╲
+│   │   │   │   │
+0   1   2   3   4
+</pre></div>
+</div>
+<p>or an end index</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">eslice</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
+      ╱  ╲
+     ╱╲  ╱╲
+    ╱ x╲╱ o╲
+   ╱╲  ╱╲  ╱╲
+  ╱  ╲╱ x╲╱  ╲
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱  ╲╱ o╲╱ x╲╱  ╲
+│   │   │   │   │
+0   1   2   3   4
+</pre></div>
+</div>
+<p>In contrast to the <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.dslice" title="triangularmap.tmap.TMap.dslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dslice()</span></code></a> and <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.lslice" title="triangularmap.tmap.TMap.lslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lslice()</span></code></a> method, we
+cannot directly slice the underlying array, because it is not aligned with slicing direction. Instead, behind the
+scenes, advanced indexing is used to get and set the elements. For simple getting or setting, this does not make
+a big difference. But it can lead to subtle bugs when first getting a slice and then trying to set elements, because
+the <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.sslice" title="triangularmap.tmap.TMap.sslice"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sslice</span></code></a> and <a class="reference internal" href="../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.eslice" title="triangularmap.tmap.TMap.eslice"><code class="xref py py-attr docutils literal notranslate"><span class="pre">eslice</span></code></a> attributes effectively
+correspond to <cite>copies</cite> not <cite>views</cite> of the underlying array. To demonstrate this, let’s first fill the map with numbers</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmap</span><span class="o">.</span><span class="n">arr</span><span class="p">[:]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">arr</span><span class="p">)))</span>  <span class="c1"># implicitly converted to strings by Numpy</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲        level
+      ╱ 0╲       4
+     ╱╲  ╱╲
+    ╱ 1╲╱ 2╲     3
+   ╱╲  ╱╲  ╱╲
+  ╱ 3╲╱ 4╲╱ 5╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱ 6╲╱ 7╲╱ 8╲╱ 9╲ 1
+│   │   │   │   │
+0   1   2   3   4
+</pre></div>
+</div>
+<p>When we now do the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lslice</span> <span class="o">=</span> <span class="n">tmap</span><span class="o">.</span><span class="n">lslice</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">sslice</span> <span class="o">=</span> <span class="n">tmap</span><span class="o">.</span><span class="n">sslice</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lslice</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sslice</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;3&#39; &#39;4&#39; &#39;5&#39;]
+[&#39;7&#39; &#39;4&#39; &#39;2&#39;]
+</pre></div>
+</div>
+<p>we get the corresponding slices, as expected. However, when we try to set elements via these objects</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lslice</span><span class="p">[:]</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+<span class="n">sslice</span><span class="p">[:]</span> <span class="o">=</span> <span class="s2">&quot;O&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lslice</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sslice</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;X&#39; &#39;X&#39; &#39;X&#39;]
+[&#39;O&#39; &#39;O&#39; &#39;O&#39;]
+       ╱╲        level
+      ╱ 0╲       4
+     ╱╲  ╱╲
+    ╱ 1╲╱ 2╲     3
+   ╱╲  ╱╲  ╱╲
+  ╱ X╲╱ X╲╱ X╲   2
+ ╱╲  ╱╲  ╱╲  ╱╲
+╱ 6╲╱ 7╲╱ 8╲╱ 9╲ 1
+│   │   │   │   │
+0   1   2   3   4
+</pre></div>
+</div>
+<p>we see that the original map is only affected for the <cite>lslice</cite> object, because it is a view, while the <cite>sslice</cite> object
+is a copy of the underlying storage (likewise for <cite>dslice</cite> and <cite>eslice</cite>).</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.009 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-usage-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/8dbd5dd764385ec31c03084c54677f81/plot_usage.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_usage.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/0ddc9b42a9706ae271f9872eb2f32543/plot_usage.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_usage.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="plot_pretty_print_example.html" class="btn btn-neutral float-left" title="Pretty Print Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api_summary.html" class="btn btn-neutral float-right" title="API Summary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Robert Lieck.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
