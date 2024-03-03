@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pretty Print Example &mdash; triangularmap  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/autoclasstoc.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -90,12 +94,12 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="pretty-print-example">
-<span id="sphx-glr-auto-examples-plot-pretty-print-example-py"></span><h1>Pretty Print Example<a class="headerlink" href="#pretty-print-example" title="Permalink to this heading"></a></h1>
+<span id="sphx-glr-auto-examples-plot-pretty-print-example-py"></span><h1>Pretty Print Example<a class="headerlink" href="#pretty-print-example" title="Link to this heading"></a></h1>
 <p>This example shows typical usages of the <code class="xref py py-func docutils literal notranslate"><span class="pre">pretty()</span></code> function.</p>
 <section id="typical-use-cases">
-<h2>Typical Use Cases<a class="headerlink" href="#typical-use-cases" title="Permalink to this heading"></a></h2>
+<h2>Typical Use Cases<a class="headerlink" href="#typical-use-cases" title="Link to this heading"></a></h2>
 <p>We create a TMap of width 6</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">triangularmap</span> <span class="kn">import</span> <span class="n">TMap</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">triangularmap</span> <span class="kn">import</span> <span class="n">TMap</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
@@ -103,7 +107,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <p>and print it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲
@@ -121,7 +125,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <p>We can add a horizontal axis and a depth axis with labels:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲            depth
@@ -141,7 +145,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <p>or a level axis instead of the depth axis:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           ╱╲            level
@@ -161,7 +165,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <p>We can cut of the top and specify custom characters for filling the whitespace:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill_char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">top_char</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">bottom_char</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">pad_char</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill_char</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">top_char</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">bottom_char</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">pad_char</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>-------╱^╲v╱^╲v╱^╲-------
@@ -176,9 +180,9 @@ to download the full example code</p>
 </div>
 </section>
 <section id="two-different-styles">
-<h2>Two Different Styles<a class="headerlink" href="#two-different-styles" title="Permalink to this heading"></a></h2>
+<h2>Two Different Styles<a class="headerlink" href="#two-different-styles" title="Link to this heading"></a></h2>
 <p>The default style uses ‘╱’ and ‘╲’ characters to draw the map. We can also use a style that additionally uses ‘╳’:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmap</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>            ╳             depth
@@ -202,7 +206,7 @@ to download the full example code</p>
 the default style). Moreover, content is padded to fill an uneven number of characters (while in the default style it
 is padded to an even number). The crosses style is therefore particularly compact if the content itself is
 of uneven width (e.g. just a single character wide):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    ╳
@@ -213,7 +217,7 @@ of uneven width (e.g. just a single character wide):</p>
 </pre></div>
 </div>
 <p>versus the default style:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;abcdefghij&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>       ╱╲
@@ -230,12 +234,12 @@ of uneven width (e.g. just a single character wide):</p>
 no unicode character for the boundary, i.e., a ‘╳’ with one of the upper arms missing.</p>
 </section>
 <section id="known-issues">
-<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this heading"></a></h2>
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h2>
 <p>Plotting of the triangular map itself is not adapted to accommodate the axes, which may result in ill-formatted axes
 for some edge cases. Below, there are no spaces between two-digit tick labels on the horizontal axis, because the
 content is only one character wide (in more extreme cases, they may even become misaligned if there is not enough
 space):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;.&#39;</span> <span class="o">*</span> <span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">TMap</span><span class="p">(</span><span class="s1">&#39;.&#39;</span> <span class="o">*</span> <span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">crosses</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>               ╳                depth
@@ -258,13 +262,13 @@ space):</p>
 0 1 2 3 4 5 6 7 8 9 101112131415
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.007 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.006 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-pretty-print-example-py">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/a30453f2a685335a459b2ae022ab3704/plot_pretty_print_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pretty_print_example.py</span></code></a></p>
-</div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/a053fd78714847962c080bab04aeb5b1/plot_pretty_print_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_pretty_print_example.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a30453f2a685335a459b2ae022ab3704/plot_pretty_print_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_pretty_print_example.py</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>

@@ -31,7 +31,7 @@ We create a TMap of width 6
 
 .. GENERATED FROM PYTHON SOURCE LINES 14-21
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from triangularmap import TMap
@@ -53,7 +53,7 @@ and print it:
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-26
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(tmap.pretty())
@@ -88,7 +88,7 @@ We can add a horizontal axis and a depth axis with labels:
 
 .. GENERATED FROM PYTHON SOURCE LINES 28-31
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(tmap.pretty(haxis=True, daxis=True))
@@ -125,7 +125,7 @@ or a level axis instead of the depth axis:
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-36
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(tmap.pretty(haxis=True, laxis=True))
@@ -162,7 +162,7 @@ We can cut of the top and specify custom characters for filling the whitespace:
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-41
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(tmap.pretty(crosses=True, cut=4, fill_char="-", top_char='^', bottom_char='v', pad_char='0'))
@@ -195,7 +195,7 @@ The default style uses '╱' and '╲' characters to draw the map. We can also u
 
 .. GENERATED FROM PYTHON SOURCE LINES 45-48
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(tmap.pretty(crosses=True, haxis=True, daxis=True))
@@ -236,7 +236,7 @@ of uneven width (e.g. just a single character wide):
 
 .. GENERATED FROM PYTHON SOURCE LINES 53-56
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(TMap('abcdefghij').pretty(crosses=True))
@@ -264,7 +264,7 @@ versus the default style:
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-61
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(TMap('abcdefghij').pretty())
@@ -305,7 +305,7 @@ space):
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-73
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(TMap('.' * TMap.size_from_n(15)).pretty(crosses=True, daxis=True, haxis=True))
@@ -341,7 +341,7 @@ space):
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.007 seconds)
+   **Total running time of the script:** (0 minutes 0.006 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_pretty_print_example.py:
@@ -350,16 +350,13 @@ space):
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_pretty_print_example.ipynb <plot_pretty_print_example.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_pretty_print_example.py <plot_pretty_print_example.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_pretty_print_example.ipynb <plot_pretty_print_example.ipynb>`
 
 
 .. only:: html

@@ -1,0 +1,6 @@
+triangularmap.tmap.tensor\_tmap
+===============================
+
+.. currentmodule:: triangularmap.tmap
+
+.. autofunction:: tensor_tmap

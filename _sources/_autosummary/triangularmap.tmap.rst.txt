@@ -9,6 +9,15 @@ triangularmap.tmap
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      array_tmap
+      dict_tmap
+      tensor_tmap
+   
    
 
    

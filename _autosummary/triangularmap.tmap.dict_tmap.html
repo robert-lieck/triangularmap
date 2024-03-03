@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>triangularmap.tmap &mdash; triangularmap  documentation</title>
+  <title>triangularmap.tmap.dict_tmap &mdash; triangularmap  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
@@ -26,8 +26,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="triangularmap.tmap.array_tmap" href="triangularmap.tmap.array_tmap.html" />
-    <link rel="prev" title="triangularmap" href="triangularmap.html" /> 
+    <link rel="next" title="triangularmap.tmap.tensor_tmap" href="triangularmap.tmap.tensor_tmap.html" />
+    <link rel="prev" title="triangularmap.tmap.array_tmap" href="triangularmap.tmap.array_tmap.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,9 +54,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">TriangularMap Gallery</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_summary.html">API Summary</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="triangularmap.html">triangularmap</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">triangularmap.tmap</a><ul>
+<li class="toctree-l3 current"><a class="reference internal" href="triangularmap.tmap.html">triangularmap.tmap</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.array_tmap.html">triangularmap.tmap.array_tmap</a></li>
-<li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.dict_tmap.html">triangularmap.tmap.dict_tmap</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">triangularmap.tmap.dict_tmap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.tensor_tmap.html">triangularmap.tmap.tensor_tmap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.TMap.html">triangularmap.tmap.TMap</a></li>
 </ul>
@@ -83,7 +83,8 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api_summary.html">API Summary</a></li>
           <li class="breadcrumb-item"><a href="triangularmap.html">triangularmap</a></li>
-      <li class="breadcrumb-item active">triangularmap.tmap</li>
+          <li class="breadcrumb-item"><a href="triangularmap.tmap.html">triangularmap.tmap</a></li>
+      <li class="breadcrumb-item active">triangularmap.tmap.dict_tmap</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,38 +93,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-triangularmap.tmap">
-<span id="triangularmap-tmap"></span><h1>triangularmap.tmap<a class="headerlink" href="#module-triangularmap.tmap" title="Link to this heading"></a></h1>
-<p class="rubric">Functions</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.array_tmap.html#triangularmap.tmap.array_tmap" title="triangularmap.tmap.array_tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array_tmap</span></code></a>(n, value, *args, **kwargs)</p></td>
-<td><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a NumPy array initialised with <code class="docutils literal notranslate"><span class="pre">value</span></code> as underlying storage.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.dict_tmap.html#triangularmap.tmap.dict_tmap" title="triangularmap.tmap.dict_tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_tmap</span></code></a>(n, default_factory, *args, **kwargs)</p></td>
-<td><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a <code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code> as underlying storage.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.tensor_tmap.html#triangularmap.tmap.tensor_tmap" title="triangularmap.tmap.tensor_tmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_tmap</span></code></a>(n, value, *args, **kwargs)</p></td>
-<td><p>Same as <a class="reference internal" href="triangularmap.tmap.array_tmap.html#triangularmap.tmap.array_tmap" title="triangularmap.tmap.array_tmap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">array_tmap()</span></code></a> but use a PyTorch tensor (<code class="docutils literal notranslate"><span class="pre">torch.full</span></code>) instead.</p></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Classes</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TMap</span></code></a>(arr[, linearise_blocks, _n])</p></td>
-<td><p>A wrapper around a 1D array that provides access in triangular (or ternary) coordinates.</p></td>
-</tr>
-</tbody>
-</table>
+  <section id="triangularmap-tmap-dict-tmap">
+<h1>triangularmap.tmap.dict_tmap<a class="headerlink" href="#triangularmap-tmap-dict-tmap" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triangularmap.tmap.dict_tmap">
+<span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">dict_tmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#dict_tmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.dict_tmap" title="Link to this definition"></a></dt>
+<dd><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a <code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code> as underlying storage. Elements will only be
+initialised (using the <code class="docutils literal notranslate"><span class="pre">default_factory</span></code> function) when accessed. Note that <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.pretty" title="triangularmap.tmap.TMap.pretty"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pretty()</span></code></a> printing the
+map will typically access (and thus initialise) all elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – size of the map</p></li>
+<li><p><strong>default_factory</strong> – function to initialise values in the dict/map (passed on to defaultdict as first argument)</p></li>
+<li><p><strong>args</strong> – additional arguments passed on the defaultdict</p></li>
+<li><p><strong>kwargs</strong> – additional arguments passed on the defaultdict</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triangularmap.html" class="btn btn-neutral float-left" title="triangularmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triangularmap.tmap.array_tmap.html" class="btn btn-neutral float-right" title="triangularmap.tmap.array_tmap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triangularmap.tmap.array_tmap.html" class="btn btn-neutral float-left" title="triangularmap.tmap.array_tmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triangularmap.tmap.tensor_tmap.html" class="btn btn-neutral float-right" title="triangularmap.tmap.tensor_tmap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

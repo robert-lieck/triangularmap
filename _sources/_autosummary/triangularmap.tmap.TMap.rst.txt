@@ -6,9 +6,6 @@ triangularmap.tmap.TMap
 .. autoclass:: TMap
    :members:
    :undoc-members:
-   :special-members:
-   :private-members:
-   :inherited-members:
    :show-inheritance:
 
    .. autoclasstoc::
