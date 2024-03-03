@@ -2,6 +2,7 @@
 
 import re
 from copy import deepcopy
+from collections import defaultdict
 
 import torch
 import numpy as np
@@ -236,8 +237,12 @@ class TMap:
         n = TMap.n_from_size(arr.shape[0])
         return arr[cls.get_reindex_from_top_down_to_start_end(n)]
 
-    def __init__(self, arr, linearise_blocks=False):
-        self._n = self.n_from_size(len(arr))
+    def __init__(self, arr, linearise_blocks=False, _n=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if _n is None:
+            self._n = self.n_from_size(len(arr))
+        else:
+            self._n = _n
         self._arr = arr
         try:
             self._value_shape = self._arr.shape[1:]
@@ -905,3 +910,73 @@ class TMap:
             s += "\n" + ("│" + " " * tick_spacing) * n + "│"
             s += "\n" + "".join(a)
         return s
+
+
+def _get_size_and_kwargs(n, **kwargs):
+    """
+    Get the underlying storage ``size`` from ``n`` (:meth:`~size_from_n`); remove 'linearise_blocks' from ``kwargs``
+    to create ``kwargs1``; if 'linearise_blocks' is in ``kwargs``, put it in ``kwargs2`` instead, otherwise make
+    ``kwargs2`` an empty dict.
+
+    :return: (``size``, ``kwargs1``, ``kwargs2``)
+    """
+    kwargs1 = kwargs
+    kwargs2 = {}
+    if 'linearise_blocks' in kwargs1:
+        kwargs2['linearise_blocks'] = kwargs1['linearise_blocks']
+        del kwargs1['linearise_blocks']
+    return TMap.size_from_n(n), kwargs1, kwargs2
+
+
+def array_tmap(n, value, *args, **kwargs):
+    """
+    Create a :class:`~TMap` of size ``n`` using a NumPy array initialised with ``value`` as underlying storage. The
+    array is created with ``numpy.full``. The first argument (the shape of the array) is computed via
+    :meth:`~size_from_n` (if ``n`` is a tuple of integers this will also be a tuple with only the first element being
+    changed; see below); the second argument is ``value``; ``*args`` and ``**kwargs`` are passed on (except for
+    ``linearise_blocks``, see below).
+
+    :param n: int or tuple of int; if ``n`` is a single integer it specifies the size (width) of the map; if ``n`` is
+     a tuple of integers, the first element specifies the size of the map and the remaining ones specify the shape of
+     the values stored in the map (i.e. :attr:`~TMap.value_shape`).
+    :param value: value to initialise the underlying array with ``numpy.full``
+    :param args: additional arguments passed on to ``numpy.full``
+    :param kwargs: additional arguments passed on to ``numpy.full``; if ``linearise_blocks`` is in ``kwargs`` this
+     will be removed first and instead directly passed on to initialise the :class:`~TMap`.
+    """
+    if isinstance(n, tuple):
+        n_ = n[0]
+        value_shape = n[1:]
+    else:
+        n_ = n
+        value_shape = ()
+    size, kw1, kw2 = _get_size_and_kwargs(n_, **kwargs)
+    return TMap(arr=np.full((size,) + value_shape, value, *args, **kw1), **kw2)
+
+
+def tensor_tmap(n, value, *args, **kwargs):
+    """
+    Same as :meth:`~array_tmap` but use a PyTorch tensor (``torch.full``) instead.
+    """
+    if isinstance(n, tuple):
+        n_ = n[0]
+        value_shape = n[1:]
+    else:
+        n_ = n
+        value_shape = ()
+    size, kw1, kw2 = _get_size_and_kwargs(n_, **kwargs)
+    return TMap(arr=torch.full((size,) + value_shape, value, *args, **kw1), **kw2)
+
+
+def dict_tmap(n, default_factory, *args, **kwargs):
+    """
+    Create a :class:`~TMap` of size ``n`` using a :class:`defaultdict` as underlying storage. Elements will only be
+    initialised (using the ``default_factory`` function) when accessed. Note that :meth:`~TMap.pretty` printing the
+    map will typically access (and thus initialise) all elements.
+
+    :param n: size of the map
+    :param default_factory: function to initialise values in the dict/map (passed on to defaultdict as first argument)
+    :param args: additional arguments passed on the defaultdict
+    :param kwargs: additional arguments passed on the defaultdict
+    """
+    return TMap(arr=defaultdict(default_factory, *args, **kwargs), _n=n)

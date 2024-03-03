@@ -2,12 +2,13 @@
 
 from unittest import TestCase, skip
 from itertools import chain
+from collections import defaultdict
 
 import numpy as np
 from numpy.testing import assert_array_equal
 import torch
 
-from triangularmap.tmap import TMap
+from triangularmap.tmap import TMap, array_tmap, tensor_tmap, dict_tmap
 
 
 # @skip("Disabled to see example coverage")
@@ -65,6 +66,15 @@ class TestTMap(TestCase):
     def test_repr(self):
         tmap = self.get_tmap(3)
         self.assertEqual(tmap.__repr__(), "TMap(n=3, [0 1 2 3 4 5], linearise_blocks=False)")
+
+    def test_arr(self):
+        tmap = self.get_tmap(3)
+        assert_array_equal(tmap.arr, np.array([0, 1, 2, 3, 4, 5]))
+
+        def f():
+            tmap.arr = []
+
+        self.assertRaises(AttributeError, f)
 
     def test_size(self):
         for n in np.random.randint(2, 100, 100):
@@ -753,3 +763,49 @@ class TestTMap(TestCase):
         # check they remapped correctly:
         assert_array_equal(TMap.reindex_from_top_down_to_start_end(seq), [6, 3, 1, 0, 7, 4, 2, 8, 5, 9])
         assert_array_equal(TMap.reindex_from_start_end_to_top_down(seq), [3, 2, 6, 1, 5, 8, 0, 4, 7, 9])
+
+    def test_array_and_tensor_tmap(self):
+        for tmap_func, arr_func in [(array_tmap, np.array),
+                                    (tensor_tmap, torch.tensor)]:
+            for linearise_blocks in [False, True]:
+                for shape, init_value, mod_value in [
+                    (4, 0, 1),  # simple map
+                    ((3,), 1., 2.2),  # simple map but tuple for size
+                    ((3, 2), 0, [1, 2]),  # map with 1D value shape
+                    ((3, 2, 4), 0, [[1., 2., 3., 4.], [5., 6., 7., 8.]]),  # map with 2D value shape
+                ]:
+                    tmap = tmap_func(shape, init_value, linearise_blocks=linearise_blocks)
+                    if isinstance(shape, tuple):
+                        arr = init_value
+                        for i, d in reversed(list(enumerate(shape))):
+                            if i == 0:
+                                d = TMap.size_from_n(d)
+                            arr = [arr] * d
+                    else:
+                        arr = [init_value] * TMap.size_from_n(shape)
+                    arr = arr_func(arr)
+                    assert_array_equal(tmap.arr, arr)
+                    mod_value = arr_func(mod_value)
+                    tmap[2, 3] = mod_value
+                    arr[tmap.linear_from_start_end(2, 3)] = mod_value
+                    assert_array_equal(tmap.arr, arr)
+
+    def test_dict_tmap(self):
+        n = 4
+        size = TMap.size_from_n(n)
+        tmap = dict_tmap(n, list)
+        self.assertEqual(tmap.arr, defaultdict(list))
+        tmap[0, 1] = "X"
+        tmap[0, 2] = 5
+        self.assertEqual(set(tmap.arr.values()), {"X", 5})
+        self.assertEqual(len(tmap.arr), 2)
+        self.assertEqual(tmap.pretty(),
+                         "       ╱╲       \n"
+                         "      ╱[]╲      \n"
+                         "     ╱╲  ╱╲     \n"
+                         "    ╱[]╲╱[]╲    \n"
+                         "   ╱╲  ╱╲  ╱╲   \n"
+                         "  ╱ 5╲╱[]╲╱[]╲  \n"
+                         " ╱╲  ╱╲  ╱╲  ╱╲ \n"
+                         "╱ X╲╱[]╲╱[]╲╱[]╲")
+        self.assertEqual(len(tmap.arr), size)
