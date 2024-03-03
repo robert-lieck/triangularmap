@@ -10,7 +10,7 @@ import numpy as np
 class TMap:
     """
     A wrapper around a 1D array that provides access in triangular (or ternary) coordinates. A 1D array of length
-    N = n * (n + 1) / 2 is mapped to a triangular layout as follows (here with N=21 and n=6):
+    :math:`N = n (n + 1) / 2` is mapped to a triangular layout as follows (here with :math:`N=21` and :math:`n=6`):
 
     ::
 
@@ -29,7 +29,7 @@ class TMap:
                    |   |   |   |   |   |   |
         start/end: 0   1   2   3   4   5   6
 
-    Values can be accessed by start and end index (0 <= start < end <= n) as follows:
+    Values can be accessed by start and end index (:math:`0 \leq start < end \leq n`) as follows:
 
     ::
 
@@ -40,8 +40,9 @@ class TMap:
            (0, 2) (1, 3) (2, 4) (3, 5) (4, 6)
         (0, 1) (1, 2) (2, 3) (3, 4) (4, 5) (5, 6)
 
-    That is (start, end) is mapped to the linear index depth * (depth + 1) / 2 + end - level, where
-    depth = n - (end - start) and level = n - depth. Advanced integer index arrays are processed in the same way and
+    That is (start, end) is mapped to the linear index :math:`depth (depth + 1) / 2 + end - level`,
+    where :math:`depth = n - (end - start)` and :math:`level = n - depth`. Advanced integer index arrays are
+    processed in the same way and
     are applied to the underlying array following standard numpy rules (e.g. direct assignment works but otherwise a
     copy of the values is returned instead of a view). Additionally, slices by depth or level return views of the
     underlying array segment. Slices by start or end index are also supported but internally use advanced indexing, so
@@ -252,14 +253,30 @@ class TMap:
 
     @property
     def n(self):
+        """
+        Size of the triangular map, i.e., the width at the triangle base. This is not the total size of the
+        underlying storage (use :meth:`~size_from_n` to convert to that).
+        """
         return self._n
 
     @property
     def arr(self):
+        """
+        Underlying storage container.
+        """
         return self._arr
+
+    @arr.setter
+    def arr(self, value):
+        raise AttributeError("Can't set attribute 'arr', which is read-only. Use the underlying '_arr' attribute if "
+                             "you know what you are doing...")
 
     @property
     def value_shape(self):
+        """
+        Shape of the values stored in the map. If the underlying array has more than one dimension, the first one is
+        used for the map and :meth:`~value_shape` corresponds to the remaining dimensions.
+        """
         return self._value_shape
 
     @property
@@ -268,26 +285,44 @@ class TMap:
 
     @property
     def lslice(self):
+        """
+        A convenience property that uses :meth:`get_lslice` and :meth:`set_lslice` as getter and setter, respectively.
+        """
         return self._lslice
 
     @property
     def dslice(self):
+        """
+        A convenience property that uses :meth:`get_dslice` and :meth:`set_dslice` as getter and setter, respectively.
+        """
         return self._dslice
 
     @property
     def sslice(self):
+        """
+        A convenience property that uses :meth:`get_sslice` and :meth:`set_sslice` as getter and setter, respectively.
+        """
         return self._sslice
 
     @property
     def eslice(self):
+        """
+        A convenience property that uses :meth:`get_eslice` and :meth:`set_eslice` as getter and setter, respectively.
+        """
         return self._eslice
 
     @property
     def sblock(self):
+        """
+        A convenience property that uses :meth:`get_sblock` and :meth:`set_sblock` as getter and setter, respectively.
+        """
         return self._sblock
 
     @property
     def eblock(self):
+        """
+        A convenience property that uses :meth:`get_eblock` and :meth:`set_eblock` as getter and setter, respectively.
+        """
         return self._eblock
 
     def _is_pytorch(self):
