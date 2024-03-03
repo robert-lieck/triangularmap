@@ -48,7 +48,7 @@ class TMap:
     they return a copy, not a view.
     """
 
-    flatten_regex = re.compile("^(?P<outer_sign>[+-]?)(?P<outer>[sel])(?P<inner_sign>[+-]?)(?P<inner>[sel])$")
+    _flatten_regex = re.compile("^(?P<outer_sign>[+-]?)(?P<outer>[sel])(?P<inner_sign>[+-]?)(?P<inner>[sel])$")
 
     class UnDef:
         """Class to indicate undefined indices"""
@@ -473,7 +473,7 @@ class TMap:
         linear_start, linear_end = self.linear_start_end_from_level(self.level(depth))
         self.arr[linear_start:linear_end + 1] = value
 
-    def end_indices_for_sslice(self, start):
+    def _end_indices_for_sslice(self, start):
         """
         Compute the end indices corresponding to a slice at the give start index.
 
@@ -482,7 +482,7 @@ class TMap:
         """
         return np.arange(start + 1, self.n + 1)
 
-    def start_indices_for_eslice(self, end):
+    def _start_indices_for_eslice(self, end):
         """
         Compute the start indices corresponding to a slice at the give end index.
 
@@ -500,7 +500,7 @@ class TMap:
         :return: copy of slice at start index
         """
         start, s = self._unpack_item(item)
-        end_indices = self.end_indices_for_sslice(start)
+        end_indices = self._end_indices_for_sslice(start)
         if s is not self.UnDef:
             end_indices = end_indices[s]
         return self[start, end_indices]
@@ -510,7 +510,7 @@ class TMap:
         Like get_sslice but set value instead of returning values.
         """
         start, s = self._unpack_item(key)
-        end_indices = self.end_indices_for_sslice(start)
+        end_indices = self._end_indices_for_sslice(start)
         if s is not self.UnDef:
             end_indices = end_indices[s]
         self[start, end_indices] = value
@@ -524,7 +524,7 @@ class TMap:
         :return: copy of slice at end index
         """
         end, s = self._unpack_item(item)
-        start_indices = self.start_indices_for_eslice(end)
+        start_indices = self._start_indices_for_eslice(end)
         if s is not self.UnDef:
             start_indices = start_indices[s]
         return self[start_indices, end]
@@ -534,7 +534,7 @@ class TMap:
         Like get_eslice but set value instead of returning values.
         """
         end, s = self._unpack_item(key)
-        start_indices = self.start_indices_for_eslice(end)
+        start_indices = self._start_indices_for_eslice(end)
         if s is not self.UnDef:
             start_indices = start_indices[s]
         self[start_indices, end] = value
@@ -545,7 +545,7 @@ class TMap:
             s = (slice(None), slice(None))
         start_indices = np.arange(0, self.n - level + 1)
         end_indices = np.concatenate(
-            [np.flip(self.end_indices_for_sslice(start)[:level, None], axis=0) for start in start_indices],
+            [np.flip(self._end_indices_for_sslice(start)[:level, None], axis=0) for start in start_indices],
             axis=1
         )
         start_indices = start_indices[None, :]
@@ -582,7 +582,7 @@ class TMap:
             s = (slice(None), slice(None))
         end_indices = np.arange(level, self.n + 1)
         start_indices = np.concatenate(
-            [self.start_indices_for_eslice(end)[-level:, None] for end in end_indices],
+            [self._start_indices_for_eslice(end)[-level:, None] for end in end_indices],
             axis=1
         )
         end_indices = end_indices[None, :]
@@ -624,7 +624,7 @@ class TMap:
         :return: 1D array with values in given order
         """
         # get order info
-        match = self.flatten_regex.match(order)
+        match = self._flatten_regex.match(order)
         if match is None:
             raise ValueError(f"Invalid order '{order}'")
         outer_dim = match['outer']
