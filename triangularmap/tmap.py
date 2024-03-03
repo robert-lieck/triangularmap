@@ -721,7 +721,7 @@ class TMap:
         return s
 
     def pretty(self, cut=None, str_func=None, detach_pytorch=True, scf=None, pos=None, rnd=None,
-               align='r', crosses=False, fill_char=" ", pad_char=" ", top_char=" ", bottom_char=" ",
+               align='r', crosses=False, cross_border=True, fill_char=" ", pad_char=" ", top_char=" ", bottom_char=" ",
                fill_lines=True, haxis=False, daxis=False, laxis=False):
         """
         Pretty-print a triangular map. See the gallery for usage examples.
@@ -734,6 +734,7 @@ class TMap:
         :param rnd: kwargs to use np.around to format value
         :param align: right-align ('r') or left-align ('l') content within cells
         :param crosses: use a different style for plotting the triangular map
+        :param cross_border: in 'crosses' style, use crosses also at the border, otherwise use straight lines
         :param fill_char: character used for indenting lines (and filling lines; see ``fill_lines``)
         :param pad_char: character used for padding content (left or right; depending on ``align``)
         :param top_char: character used to fill remaining space at the top within cells
@@ -768,8 +769,10 @@ class TMap:
             else:
                 str_func = str
         # get values as strings
+        # also get maximum width and number of lines
         str_slices = []
-        max_width = -1
+        max_width = 0
+        max_lines = 1
         for depth in range(self.n):
             str_slices.append([])
             # level corresponding to depth
@@ -777,28 +780,38 @@ class TMap:
             # cut at level
             if cut is not None and level > cut:
                 continue
-            for val in self.dslice[depth]:
+            for start in range(depth + 1):
+                val = self[start, start + level]
                 if self._is_pytorch() and detach_pytorch:
                     val = val.detach().numpy()
-                str_val = str_func(val)
-                max_width = max(max_width, len(str_val))
-                str_slices[-1].append(str_val)
-        # get maximum width to use for all elements
+                str_lines = str_func(val).split("\n")
+                if len(str_lines) > 1:
+                    max_width = max(max_width, max(len(s) for s in str_lines))
+                    max_lines = max(max_lines, len(str_lines))
+                else:
+                    max_width = max(max_width, len(str_lines[0]))
+                str_slices[-1].append(str_lines)
+        # adjust width for different styles
         if crosses:
             # width must be uneven
             max_width = int(2 * np.floor(max_width / 2)) + 1
         else:
             # width must be even
             max_width = int(2 * np.ceil(max_width / 2))
-        # adjust width
-        for sl_idx, sl in enumerate(str_slices):
-            for idx, str_val in enumerate(sl):
-                if align == 'r':
-                    str_slices[sl_idx][idx] = str_val.rjust(max_width, pad_char)
-                elif align == 'l':
-                    str_slices[sl_idx][idx] = str_val.ljust(max_width, pad_char)
-                else:
-                    raise ValueError(f"'align' has to be 'l' or 'r' but is '{align}'")
+        # adjust width and number of lines of string elements (also align left or right)
+        for slice_idx, str_slice in enumerate(str_slices):
+            for line_idx, str_lines in enumerate(str_slice):
+                while len(str_lines) < max_lines:
+                    str_lines.append("")
+                for value_idx, str_value in enumerate(str_lines):
+                    if align == 'r':
+                        str_slices[slice_idx][line_idx][value_idx] = str_value.rjust(max_width, pad_char)
+                    elif align == 'l':
+                        str_slices[slice_idx][line_idx][value_idx] = str_value.ljust(max_width, pad_char)
+                    else:
+                        raise ValueError(f"'align' has to be 'l' or 'r' but is '{align}'")
+        # adapt max width to account for multi-line values (the actual strings are less wide and will be padded below)
+        # max_width += 2 * (max_lines - 1)
         # for x in str_slices:
         #     print(x)
         # generate triangular matrix
@@ -811,36 +824,37 @@ class TMap:
         if crosses and cut is None:
             depth_indent = fill_char * lines_per_level * (self.n - 1)
             line_indent = fill_char * (lines_per_level - 1)
-            s += depth_indent + line_indent + fill_char + "╳"
+            pad = depth_indent + line_indent + fill_char * (self.n * (max_lines - 1) + 1)
+            s += pad + "╳"
             if fill_lines:
-                s += fill_char + line_indent + depth_indent
+                s += pad
             # add depth axis label
             if daxis:
                 s += " depth"
             if laxis:
                 s += " level"
-        for depth, sl in enumerate(str_slices):
+        for depth, str_slice in enumerate(str_slices):
             # level corresponding to depth
             level = self.level(depth)
             # cut at level
             if cut is not None and level > cut:
                 continue
             # base indentation of this slice
-            depth_indent = fill_char * lines_per_level * (level - 1)
+            depth_indent = fill_char * (lines_per_level + max_lines - 1) * (level - 1)
             # add lines to draw structure
             for line in range(lines_per_level - 1):
                 # additional indent for this line of slice
-                line_indent = fill_char * (lines_per_level - line - 1)
+                line_indent = fill_char * (lines_per_level - line - 1 + max_lines - 1)
                 # newline if not empty
                 if s:
                     s += "\n"
                 # spacing within and in between cells
                 if crosses:
                     within_cell_spacing = top_char * (2 * line + 1)
-                    in_between_cell_spacing = bottom_char * (2 * (lines_per_level - line - 1) - 1)
+                    in_between_cell_spacing = bottom_char * (2 * (lines_per_level + max_lines - line - 2) - 1)
                 else:
                     within_cell_spacing = top_char * 2 * line
-                    in_between_cell_spacing = bottom_char * 2 * (lines_per_level - line - 1)
+                    in_between_cell_spacing = bottom_char * 2 * (lines_per_level + max_lines - line - 2)
                 # add indentation
                 s += depth_indent + line_indent
                 s += ("╱" + within_cell_spacing + "╲" + in_between_cell_spacing) * depth + "╱" + within_cell_spacing + "╲"
@@ -853,25 +867,40 @@ class TMap:
                     if laxis:
                         s += " level"
             # add line with actual content
-            if crosses:
-                s += "\n" + depth_indent + "╳" + "╳".join(sl) + "╳"
-            else:
-                s += "\n" + depth_indent + "╱" + "╲╱".join(sl) + "╲"
-            # fill lines
-            if fill_lines:
-                s += depth_indent
-            # add depth axis
-            if daxis:
-                s += f" {depth}"
-            if laxis:
-                s += f" {level}"
+            for sub_idx, sub_slice in enumerate(np.array(str_slice).T):
+                sub_line_indent = fill_char * (max_lines - sub_idx - 1)
+                padding = fill_char * sub_idx
+                if crosses:
+                    in_between_fill = fill_char * ((max_lines - sub_idx - 1) * 2 - 1)
+                    if sub_idx == max_lines - 1:
+                        if cross_border:
+                            left_border = "╳"
+                            right_border = "╳"
+                        else:
+                            left_border = "╱"
+                            right_border = "╲"
+                        s += "\n" + sub_line_indent + depth_indent + left_border + padding + (padding + "╳" + padding).join(sub_slice) + padding + right_border
+                    else:
+                        s += "\n" + sub_line_indent + depth_indent + "╱" + padding + (padding + "╲" + in_between_fill + "╱" + padding).join(sub_slice) + padding + "╲"
+                else:
+                    in_between_fill = fill_char * (max_lines - sub_idx - 1) * 2
+                    s += "\n" + sub_line_indent + depth_indent + "╱" + padding + (padding + "╲" + in_between_fill + "╱" + padding).join(sub_slice) + padding + "╲"
+                # fill lines
+                if fill_lines:
+                    s += depth_indent
+                s += fill_char * (max_lines - sub_idx - 1)
+                # add depth axis
+                if daxis:
+                    s += f" {depth}"
+                if laxis:
+                    s += f" {level}"
         if haxis:
             if crosses:
-                tick_spacing = max_width
+                tick_spacing = max_width + 2 * (max_lines - 1)
             else:
-                tick_spacing = max_width + 1
+                tick_spacing = max_width + 1 + 2 * (max_lines - 1)
             just_width = tick_spacing + 1
-            n = len(str_slices[-1])
+            n = self.n
             a = [str(x).ljust(just_width) for x in range(n + 1)]
             s += "\n" + ("│" + " " * tick_spacing) * n + "│"
             s += "\n" + "".join(a)
