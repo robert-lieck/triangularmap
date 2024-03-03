@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="triangularmap",
-    version="0.1.0",
+    version="0.1.1",
     author="Robert Lieck",
     author_email="robert.lieck@durham.ac.uk",
     description="A Python library for working with triangular maps stored in linear arrays.",
