@@ -64,3 +64,6 @@ html_static_path = ['_static']
 
 # use svg in imgmath extension
 imgmath_image_format='svg'
+
+# In the main body of an autoclass directive, insert both the class’ and the __init__ method’s docstring
+autoclass_content = 'both'
