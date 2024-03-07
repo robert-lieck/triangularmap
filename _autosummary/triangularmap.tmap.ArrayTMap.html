@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>triangularmap.tmap.ArrayTMap &mdash; triangularmap  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="triangularmap.tmap.DictTMap" href="triangularmap.tmap.DictTMap.html" />
+    <link rel="prev" title="triangularmap.tmap" href="triangularmap.tmap.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            triangularmap
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">TriangularMap Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_summary.html">API Summary</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="triangularmap.html">triangularmap</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="triangularmap.tmap.html">triangularmap.tmap</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">triangularmap.tmap.ArrayTMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.DictTMap.html">triangularmap.tmap.DictTMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.TMap.html">triangularmap.tmap.TMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.TensorTMap.html">triangularmap.tmap.TensorTMap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">triangularmap</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api_summary.html">API Summary</a></li>
+          <li class="breadcrumb-item"><a href="triangularmap.html">triangularmap</a></li>
+          <li class="breadcrumb-item"><a href="triangularmap.tmap.html">triangularmap.tmap</a></li>
+      <li class="breadcrumb-item active">triangularmap.tmap.ArrayTMap</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="triangularmap-tmap-arraytmap">
+<h1>triangularmap.tmap.ArrayTMap<a class="headerlink" href="#triangularmap-tmap-arraytmap" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triangularmap.tmap.ArrayTMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">ArrayTMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#ArrayTMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.ArrayTMap" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a></p>
+<p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a NumPy array initialised with <code class="docutils literal notranslate"><span class="pre">value</span></code> as underlying storage.
+The array is created with <code class="docutils literal notranslate"><span class="pre">numpy.full</span></code>. The first argument (the shape of the array) is computed via
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">size_from_n()</span></code> (if <code class="docutils literal notranslate"><span class="pre">n</span></code> is a tuple of integers this will also be a tuple with only the first element
+being changed; see below); the second argument is <code class="docutils literal notranslate"><span class="pre">value</span></code>; <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> are passed on (except
+for <code class="docutils literal notranslate"><span class="pre">linearise_blocks</span></code>, see below).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – int or tuple of int; if <code class="docutils literal notranslate"><span class="pre">n</span></code> is a single integer it specifies the size (width) of the map; if
+<code class="docutils literal notranslate"><span class="pre">n</span></code> is a tuple of integers, the first element specifies the size of the map and the remaining ones specify
+the shape of the values stored in the map (i.e. <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.value_shape" title="triangularmap.tmap.TMap.value_shape"><code class="xref py py-attr docutils literal notranslate"><span class="pre">value_shape</span></code></a>).</p></li>
+<li><p><strong>value</strong> – value to initialise the underlying array with <code class="docutils literal notranslate"><span class="pre">numpy.full</span></code></p></li>
+<li><p><strong>args</strong> – additional arguments passed on to <code class="docutils literal notranslate"><span class="pre">numpy.full</span></code></p></li>
+<li><p><strong>kwargs</strong> – additional arguments passed on to <code class="docutils literal notranslate"><span class="pre">numpy.full</span></code>; if <code class="docutils literal notranslate"><span class="pre">linearise_blocks</span></code> is in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> this
+will be removed first and instead directly passed on to initialise the <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Public Data Attributes:</p>
+<details><summary>Inherited from <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a></summary><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.n" title="triangularmap.tmap.TMap.n"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n</span></code></a></p></td>
+<td><p>Size of the triangular map, i.e., the width at the triangle base.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.arr" title="triangularmap.tmap.TMap.arr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arr</span></code></a></p></td>
+<td><p>Underlying storage container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.value_shape" title="triangularmap.tmap.TMap.value_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_shape</span></code></a></p></td>
+<td><p>Shape of the values stored in the map.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.linearise_blocks" title="triangularmap.tmap.TMap.linearise_blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linearise_blocks</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.lslice" title="triangularmap.tmap.TMap.lslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lslice</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_lslice()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_lslice()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.dslice" title="triangularmap.tmap.TMap.dslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dslice</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dslice()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_dslice()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.sslice" title="triangularmap.tmap.TMap.sslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sslice</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_sslice()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_sslice()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.eslice" title="triangularmap.tmap.TMap.eslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eslice</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_eslice()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_eslice()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.sblock" title="triangularmap.tmap.TMap.sblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sblock</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_sblock()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_sblock()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.eblock" title="triangularmap.tmap.TMap.eblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eblock</span></code></a></p></td>
+<td><p>A convenience property that uses <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_eblock()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_eblock()</span></code> as getter and setter, respectively.</p></td>
+</tr>
+</tbody>
+</table>
+</details></div>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Public Methods:</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code>(cls, n, value, *args, **kwargs)</p></td>
+<td><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a NumPy array initialised with <code class="docutils literal notranslate"><span class="pre">value</span></code> as underlying storage.</p></td>
+</tr>
+</tbody>
+</table>
+<details><summary>Inherited from <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a></summary><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.size_from_n" title="triangularmap.tmap.TMap.size_from_n"><code class="xref py py-obj docutils literal notranslate"><span class="pre">size_from_n</span></code></a>(n)</p></td>
+<td><p>Calculate the size <cite>N</cite> of the underlying 1D array for a given width <code class="docutils literal notranslate"><span class="pre">n</span></code> of the triangular map: <span class="math">N = n (n + 1)) / 2</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.n_from_size" title="triangularmap.tmap.TMap.n_from_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_from_size</span></code></a>(n)</p></td>
+<td><p>Calculate width <code class="docutils literal notranslate"><span class="pre">n</span></code> of the map given the size <cite>N</cite> of the underlying 1D array: <span class="math">n = (\sqrt{8 * N + 1} - 1) / 2</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_reindex_from_start_end_to_top_down" title="triangularmap.tmap.TMap.get_reindex_from_start_end_to_top_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reindex_from_start_end_to_top_down</span></code></a>(n)</p></td>
+<td><p>For a map of width <code class="docutils literal notranslate"><span class="pre">n</span></code>, get an index array of length <span class="math">n (n + 1)) / 2</span> to reindex from start-end order to top-down order.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.reindex_from_start_end_to_top_down" title="triangularmap.tmap.TMap.reindex_from_start_end_to_top_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reindex_from_start_end_to_top_down</span></code></a>(arr)</p></td>
+<td><p>Reindex <code class="docutils literal notranslate"><span class="pre">arr</span></code> from start-end order to top-down order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_reindex_from_top_down_to_start_end" title="triangularmap.tmap.TMap.get_reindex_from_top_down_to_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reindex_from_top_down_to_start_end</span></code></a>(n)</p></td>
+<td><p>For a map of width <code class="docutils literal notranslate"><span class="pre">n</span></code>, get an index array of length <span class="math">n (n + 1)) / 2</span> to reindex from top-down order to start-end order.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.reindex_from_top_down_to_start_end" title="triangularmap.tmap.TMap.reindex_from_top_down_to_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reindex_from_top_down_to_start_end</span></code></a>(arr)</p></td>
+<td><p>Reindex <code class="docutils literal notranslate"><span class="pre">arr</span></code> from top-down order to start-end order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code>(arr[, linearise_blocks, _n])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.depth" title="triangularmap.tmap.TMap.depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depth</span></code></a>(start, end)</p></td>
+<td><p>Compute the depth d corresponding to (start, end): d = n - (end - start).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.level" title="triangularmap.tmap.TMap.level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">level</span></code></a>(*args)</p></td>
+<td><p>Compute the level from depth or (start, end).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.linear_from_start_end" title="triangularmap.tmap.TMap.linear_from_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_from_start_end</span></code></a>(start, end)</p></td>
+<td><p>Compute the linear index (in the underlying 1D array) corresponding to a (start, end) pair.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getitem__</span></code>(item)</p></td>
+<td><p>Get the item corresponding to (start, end) or the sub-map corresponding to slice start:end.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__setitem__</span></code>(key, value)</p></td>
+<td><p>Set the item corresponding to (start, end).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.copy" title="triangularmap.tmap.TMap.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>()</p></td>
+<td><p>Copy the map.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.top" title="triangularmap.tmap.TMap.top"><code class="xref py py-obj docutils literal notranslate"><span class="pre">top</span></code></a>([depth])</p></td>
+<td><p>Return the sub-map corresponding to the top-most levels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.linear_start_end_from_level" title="triangularmap.tmap.TMap.linear_start_end_from_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_start_end_from_level</span></code></a>(level)</p></td>
+<td><p>Compute the linear 1D start and end index corresponding to all values in the respective level of the map.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_lslice" title="triangularmap.tmap.TMap.get_lslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lslice</span></code></a>(level)</p></td>
+<td><p>Slice the map at the given level, returning a view of the values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_lslice" title="triangularmap.tmap.TMap.set_lslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_lslice</span></code></a>(level, value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_dslice" title="triangularmap.tmap.TMap.get_dslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dslice</span></code></a>(depth)</p></td>
+<td><p>Slice the map at the given depth, returning a view of the values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_dslice" title="triangularmap.tmap.TMap.set_dslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_dslice</span></code></a>(depth, value)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_sslice" title="triangularmap.tmap.TMap.get_sslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sslice</span></code></a>(item)</p></td>
+<td><p>Return a slice for the given start index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_sslice" title="triangularmap.tmap.TMap.set_sslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_sslice</span></code></a>(key, value)</p></td>
+<td><p>Like get_sslice but set value instead of returning values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_eslice" title="triangularmap.tmap.TMap.get_eslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_eslice</span></code></a>(item)</p></td>
+<td><p>Return a slice for the given end index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_eslice" title="triangularmap.tmap.TMap.set_eslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_eslice</span></code></a>(key, value)</p></td>
+<td><p>Like get_eslice but set value instead of returning values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_sblock" title="triangularmap.tmap.TMap.get_sblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sblock</span></code></a>(item)</p></td>
+<td><p>Return a block of sslices down from the specified level.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_sblock" title="triangularmap.tmap.TMap.set_sblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_sblock</span></code></a>(key, value)</p></td>
+<td><p>Like get_sblock but set value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.get_eblock" title="triangularmap.tmap.TMap.get_eblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_eblock</span></code></a>(item)</p></td>
+<td><p>Return a block of eslices down from the specified level.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.set_eblock" title="triangularmap.tmap.TMap.set_eblock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_eblock</span></code></a>(key, value)</p></td>
+<td><p>Like get_sblock but set value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.flatten" title="triangularmap.tmap.TMap.flatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code></a>([order])</p></td>
+<td><p>Return map in linear order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__repr__</span></code>()</p></td>
+<td><p>Return repr(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__str__</span></code>()</p></td>
+<td><p>Return a string representation of the map, consisting of consecutive dslices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.pretty" title="triangularmap.tmap.TMap.pretty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pretty</span></code></a>([cut, str_func, detach_pytorch, scf, ...])</p></td>
+<td><p>Pretty-print a triangular map.</p></td>
+</tr>
+</tbody>
+</table>
+</details></div>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Private Data Attributes:</p>
+<details><summary>Inherited from <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a></summary><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_regex</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</details></div>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Private Methods:</p>
+<details><summary>Inherited from <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a></summary><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_to_int</span></code>(i)</p></td>
+<td><p>Convert i to integer, no matter whether it is a single number or a numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_unpack_item</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_pytorch</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check</span></code>(start, end)</p></td>
+<td><p>Check whether 0 &lt;= start &lt; end &lt; n.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_end_indices_for_sslice</span></code>(start)</p></td>
+<td><p>Compute the end indices corresponding to a slice at the give start index.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_start_indices_for_eslice</span></code>(end)</p></td>
+<td><p>Compute the start indices corresponding to a slice at the give end index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_sblock_index</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_eblock_index</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</details></div>
+<hr class="docutils" />
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triangularmap.tmap.html" class="btn btn-neutral float-left" title="triangularmap.tmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triangularmap.tmap.DictTMap.html" class="btn btn-neutral float-right" title="triangularmap.tmap.DictTMap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Robert Lieck.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

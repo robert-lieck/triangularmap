@@ -1,6 +1,0 @@
-triangularmap.tmap.dict\_tmap
-=============================
-
-.. currentmodule:: triangularmap.tmap
-
-.. autofunction:: dict_tmap

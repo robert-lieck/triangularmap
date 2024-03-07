@@ -1,0 +1,11 @@
+triangularmap.tmap.TensorTMap
+=============================
+
+.. currentmodule:: triangularmap.tmap
+
+.. autoclass:: TensorTMap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+   .. autoclasstoc::

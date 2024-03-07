@@ -1,0 +1,11 @@
+triangularmap.tmap.DictTMap
+===========================
+
+.. currentmodule:: triangularmap.tmap
+
+.. autoclass:: DictTMap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+   .. autoclasstoc::

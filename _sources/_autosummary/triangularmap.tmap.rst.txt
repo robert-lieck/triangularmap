@@ -9,15 +9,6 @@ triangularmap.tmap
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:
-   
-      array_tmap
-      dict_tmap
-      tensor_tmap
-   
    
 
    
@@ -28,7 +19,10 @@ triangularmap.tmap
       :toctree:
       :template: custom-class-template.rst
    
+      ArrayTMap
+      DictTMap
       TMap
+      TensorTMap
    
    
 

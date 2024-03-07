@@ -573,7 +573,7 @@
             <span class="n">copy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">linearise_blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linearise_blocks</span><span class="p">,</span> <span class="n">_n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TMap.top">
@@ -891,7 +891,10 @@
 <a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.TMap.html#triangularmap.tmap.TMap.pretty">[docs]</a>
     <span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">str_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detach_pytorch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">align</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">crosses</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cross_border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fill_char</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">pad_char</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">top_char</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">bottom_char</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
-               <span class="n">fill_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+               <span class="n">fill_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">haxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">daxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">laxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">left_border_char</span><span class="o">=</span><span class="s2">&quot;╱&quot;</span><span class="p">,</span> <span class="n">left_inner_char</span><span class="o">=</span><span class="s2">&quot;╱&quot;</span><span class="p">,</span> <span class="n">right_border_char</span><span class="o">=</span><span class="s2">&quot;╲&quot;</span><span class="p">,</span> <span class="n">right_inner_char</span><span class="o">=</span><span class="s2">&quot;╲&quot;</span><span class="p">,</span>
+               <span class="n">left_border_cross_char</span><span class="o">=</span><span class="s2">&quot;╳&quot;</span><span class="p">,</span> <span class="n">right_border_cross_char</span><span class="o">=</span><span class="s2">&quot;╳&quot;</span><span class="p">,</span> <span class="n">inner_cross_char</span><span class="o">=</span><span class="s2">&quot;╳&quot;</span><span class="p">,</span> <span class="n">top_cross_char</span><span class="o">=</span><span class="s2">&quot;╳&quot;</span><span class="p">,</span>
+               <span class="n">grid_off</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pretty-print a triangular map. See the gallery for usage examples.</span>
 
@@ -914,6 +917,8 @@
 <span class="sd">        :param laxis: plot a level axis on the right (not compatible with &#39;daxis&#39;)</span>
 <span class="sd">        :return: pretty-printed string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">grid_off</span><span class="p">:</span>
+            <span class="n">left_border_char</span> <span class="o">=</span> <span class="n">left_inner_char</span> <span class="o">=</span> <span class="n">right_border_char</span> <span class="o">=</span> <span class="n">right_inner_char</span> <span class="o">=</span> <span class="n">left_border_cross_char</span> <span class="o">=</span> <span class="n">right_border_cross_char</span> <span class="o">=</span> <span class="n">inner_cross_char</span> <span class="o">=</span> <span class="n">top_cross_char</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
         <span class="k">if</span> <span class="n">daxis</span> <span class="ow">and</span> <span class="n">laxis</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Only one of &#39;daxis&#39; and &#39;laxis&#39; may be true.&quot;</span><span class="p">)</span>
         <span class="c1"># if depth axis is used, lines have to be filled</span>
@@ -994,7 +999,7 @@
             <span class="n">depth_indent</span> <span class="o">=</span> <span class="n">fill_char</span> <span class="o">*</span> <span class="n">lines_per_level</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">line_indent</span> <span class="o">=</span> <span class="n">fill_char</span> <span class="o">*</span> <span class="p">(</span><span class="n">lines_per_level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">pad</span> <span class="o">=</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">line_indent</span> <span class="o">+</span> <span class="n">fill_char</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lines</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">s</span> <span class="o">+=</span> <span class="n">pad</span> <span class="o">+</span> <span class="s2">&quot;╳&quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">pad</span> <span class="o">+</span> <span class="n">top_cross_char</span>
             <span class="k">if</span> <span class="n">fill_lines</span><span class="p">:</span>
                 <span class="n">s</span> <span class="o">+=</span> <span class="n">pad</span>
             <span class="c1"># add depth axis label</span>
@@ -1026,7 +1031,12 @@
                     <span class="n">in_between_cell_spacing</span> <span class="o">=</span> <span class="n">bottom_char</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">lines_per_level</span> <span class="o">+</span> <span class="n">max_lines</span> <span class="o">-</span> <span class="n">line</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="c1"># add indentation</span>
                 <span class="n">s</span> <span class="o">+=</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">line_indent</span>
-                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span> <span class="o">+</span> <span class="n">in_between_cell_spacing</span><span class="p">)</span> <span class="o">*</span> <span class="n">depth</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span>
+                <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">left_border_char</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="n">right_inner_char</span> <span class="o">+</span> <span class="n">in_between_cell_spacing</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="n">left_inner_char</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="n">right_inner_char</span> <span class="o">+</span> <span class="n">in_between_cell_spacing</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">left_inner_char</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="n">right_border_char</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="n">left_border_char</span> <span class="o">+</span> <span class="n">within_cell_spacing</span> <span class="o">+</span> <span class="n">right_border_char</span>
                 <span class="k">if</span> <span class="n">fill_lines</span><span class="p">:</span>
                     <span class="n">s</span> <span class="o">+=</span> <span class="n">line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span>
                 <span class="c1"># add depth axis label</span>
@@ -1043,17 +1053,17 @@
                     <span class="n">in_between_fill</span> <span class="o">=</span> <span class="n">fill_char</span> <span class="o">*</span> <span class="p">((</span><span class="n">max_lines</span> <span class="o">-</span> <span class="n">sub_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">sub_idx</span> <span class="o">==</span> <span class="n">max_lines</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">cross_border</span><span class="p">:</span>
-                            <span class="n">left_border</span> <span class="o">=</span> <span class="s2">&quot;╳&quot;</span>
-                            <span class="n">right_border</span> <span class="o">=</span> <span class="s2">&quot;╳&quot;</span>
+                            <span class="n">left_border</span> <span class="o">=</span> <span class="n">left_border_cross_char</span>
+                            <span class="n">right_border</span> <span class="o">=</span> <span class="n">right_border_cross_char</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">left_border</span> <span class="o">=</span> <span class="s2">&quot;╱&quot;</span>
-                            <span class="n">right_border</span> <span class="o">=</span> <span class="s2">&quot;╲&quot;</span>
-                        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">left_border</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="s2">&quot;╳&quot;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">right_border</span>
+                            <span class="n">left_border</span> <span class="o">=</span> <span class="n">left_border_char</span>
+                            <span class="n">right_border</span> <span class="o">=</span> <span class="n">right_border_char</span>
+                        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">left_border</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="n">inner_cross_char</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">right_border</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span> <span class="o">+</span> <span class="n">in_between_fill</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span>
+                        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">left_border_char</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="n">right_inner_char</span> <span class="o">+</span> <span class="n">in_between_fill</span> <span class="o">+</span> <span class="n">left_inner_char</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">right_border_char</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">in_between_fill</span> <span class="o">=</span> <span class="n">fill_char</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lines</span> <span class="o">-</span> <span class="n">sub_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
-                    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span> <span class="o">+</span> <span class="n">in_between_fill</span> <span class="o">+</span> <span class="s2">&quot;╱&quot;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="s2">&quot;╲&quot;</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">sub_line_indent</span> <span class="o">+</span> <span class="n">depth_indent</span> <span class="o">+</span> <span class="n">left_border_char</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="n">padding</span> <span class="o">+</span> <span class="n">right_inner_char</span> <span class="o">+</span> <span class="n">in_between_fill</span> <span class="o">+</span> <span class="n">left_inner_char</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span> <span class="o">+</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">right_border_char</span>
                 <span class="c1"># fill lines</span>
                 <span class="k">if</span> <span class="n">fill_lines</span><span class="p">:</span>
                     <span class="n">s</span> <span class="o">+=</span> <span class="n">depth_indent</span>
@@ -1080,80 +1090,79 @@
 
 <span class="k">def</span> <span class="nf">_get_size_and_kwargs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the underlying storage ``size`` from ``n`` (:meth:`~size_from_n`); remove &#39;linearise_blocks&#39; from ``kwargs``</span>
-<span class="sd">    to create ``kwargs1``; if &#39;linearise_blocks&#39; is in ``kwargs``, put it in ``kwargs2`` instead, otherwise make</span>
-<span class="sd">    ``kwargs2`` an empty dict.</span>
+<span class="sd">    Get the underlying storage ``size`` from ``n`` (:meth:`~size_from_n`); if ``n`` is a tuple of integers instead of</span>
+<span class="sd">    a single integer, only change the first element; see below; remove &#39;linearise_blocks&#39; from ``kwargs`` to create</span>
+<span class="sd">    ``kwargs1``; if &#39;linearise_blocks&#39; is in ``kwargs``, put it in ``kwargs2`` instead, otherwise make ``kwargs2`` an</span>
+<span class="sd">    empty dict.</span>
 
 <span class="sd">    :return: (``size``, ``kwargs1``, ``kwargs2``)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]),)</span> <span class="o">+</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">),)</span>
     <span class="n">kwargs1</span> <span class="o">=</span> <span class="n">kwargs</span>
     <span class="n">kwargs2</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="s1">&#39;linearise_blocks&#39;</span> <span class="ow">in</span> <span class="n">kwargs1</span><span class="p">:</span>
         <span class="n">kwargs2</span><span class="p">[</span><span class="s1">&#39;linearise_blocks&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs1</span><span class="p">[</span><span class="s1">&#39;linearise_blocks&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">kwargs1</span><span class="p">[</span><span class="s1">&#39;linearise_blocks&#39;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">TMap</span><span class="o">.</span><span class="n">size_from_n</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">kwargs1</span><span class="p">,</span> <span class="n">kwargs2</span>
+    <span class="k">return</span> <span class="n">size</span><span class="p">,</span> <span class="n">kwargs1</span><span class="p">,</span> <span class="n">kwargs2</span>
 
 
-<div class="viewcode-block" id="array_tmap">
-<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.array_tmap.html#triangularmap.tmap.array_tmap">[docs]</a>
-<span class="k">def</span> <span class="nf">array_tmap</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a :class:`~TMap` of size ``n`` using a NumPy array initialised with ``value`` as underlying storage. The</span>
-<span class="sd">    array is created with ``numpy.full``. The first argument (the shape of the array) is computed via</span>
-<span class="sd">    :meth:`~size_from_n` (if ``n`` is a tuple of integers this will also be a tuple with only the first element being</span>
-<span class="sd">    changed; see below); the second argument is ``value``; ``*args`` and ``**kwargs`` are passed on (except for</span>
-<span class="sd">    ``linearise_blocks``, see below).</span>
+<div class="viewcode-block" id="ArrayTMap">
+<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.ArrayTMap.html#triangularmap.tmap.ArrayTMap">[docs]</a>
+<span class="k">class</span> <span class="nc">ArrayTMap</span><span class="p">(</span><span class="n">TMap</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`~TMap` of size ``n`` using a NumPy array initialised with ``value`` as underlying storage.</span>
+<span class="sd">        The array is created with ``numpy.full``. The first argument (the shape of the array) is computed via</span>
+<span class="sd">        :meth:`~size_from_n` (if ``n`` is a tuple of integers this will also be a tuple with only the first element</span>
+<span class="sd">        being changed; see below); the second argument is ``value``; ``*args`` and ``**kwargs`` are passed on (except</span>
+<span class="sd">        for ``linearise_blocks``, see below).</span>
 
-<span class="sd">    :param n: int or tuple of int; if ``n`` is a single integer it specifies the size (width) of the map; if ``n`` is</span>
-<span class="sd">     a tuple of integers, the first element specifies the size of the map and the remaining ones specify the shape of</span>
-<span class="sd">     the values stored in the map (i.e. :attr:`~TMap.value_shape`).</span>
-<span class="sd">    :param value: value to initialise the underlying array with ``numpy.full``</span>
-<span class="sd">    :param args: additional arguments passed on to ``numpy.full``</span>
-<span class="sd">    :param kwargs: additional arguments passed on to ``numpy.full``; if ``linearise_blocks`` is in ``kwargs`` this</span>
-<span class="sd">     will be removed first and instead directly passed on to initialise the :class:`~TMap`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-        <span class="n">n_</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">value_shape</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">n_</span> <span class="o">=</span> <span class="n">n</span>
-        <span class="n">value_shape</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">size</span><span class="p">,</span> <span class="n">kw1</span><span class="p">,</span> <span class="n">kw2</span> <span class="o">=</span> <span class="n">_get_size_and_kwargs</span><span class="p">(</span><span class="n">n_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">size</span><span class="p">,)</span> <span class="o">+</span> <span class="n">value_shape</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw1</span><span class="p">),</span> <span class="o">**</span><span class="n">kw2</span><span class="p">)</span></div>
+<span class="sd">        :param n: int or tuple of int; if ``n`` is a single integer it specifies the size (width) of the map; if</span>
+<span class="sd">         ``n`` is a tuple of integers, the first element specifies the size of the map and the remaining ones specify</span>
+<span class="sd">         the shape of the values stored in the map (i.e. :attr:`~TMap.value_shape`).</span>
+<span class="sd">        :param value: value to initialise the underlying array with ``numpy.full``</span>
+<span class="sd">        :param args: additional arguments passed on to ``numpy.full``</span>
+<span class="sd">        :param kwargs: additional arguments passed on to ``numpy.full``; if ``linearise_blocks`` is in ``kwargs`` this</span>
+<span class="sd">         will be removed first and instead directly passed on to initialise the :class:`~TMap`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span><span class="p">,</span> <span class="n">kw1</span><span class="p">,</span> <span class="n">kw2</span> <span class="o">=</span> <span class="n">_get_size_and_kwargs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw1</span><span class="p">),</span> <span class="o">**</span><span class="n">kw2</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="tensor_tmap">
-<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.tensor_tmap.html#triangularmap.tmap.tensor_tmap">[docs]</a>
-<span class="k">def</span> <span class="nf">tensor_tmap</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Same as :meth:`~array_tmap` but use a PyTorch tensor (``torch.full``) instead.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-        <span class="n">n_</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">value_shape</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">n_</span> <span class="o">=</span> <span class="n">n</span>
-        <span class="n">value_shape</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">size</span><span class="p">,</span> <span class="n">kw1</span><span class="p">,</span> <span class="n">kw2</span> <span class="o">=</span> <span class="n">_get_size_and_kwargs</span><span class="p">(</span><span class="n">n_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">size</span><span class="p">,)</span> <span class="o">+</span> <span class="n">value_shape</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw1</span><span class="p">),</span> <span class="o">**</span><span class="n">kw2</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TensorTMap">
+<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.TensorTMap.html#triangularmap.tmap.TensorTMap">[docs]</a>
+<span class="k">class</span> <span class="nc">TensorTMap</span><span class="p">(</span><span class="n">TMap</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Same as :meth:`~ArrayTMap` but use a PyTorch tensor (``torch.full``) instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span><span class="p">,</span> <span class="n">kw1</span><span class="p">,</span> <span class="n">kw2</span> <span class="o">=</span> <span class="n">_get_size_and_kwargs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw1</span><span class="p">),</span> <span class="o">**</span><span class="n">kw2</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="dict_tmap">
-<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.dict_tmap.html#triangularmap.tmap.dict_tmap">[docs]</a>
-<span class="k">def</span> <span class="nf">dict_tmap</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">default_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a :class:`~TMap` of size ``n`` using a :class:`defaultdict` as underlying storage. Elements will only be</span>
-<span class="sd">    initialised (using the ``default_factory`` function) when accessed. Note that :meth:`~TMap.pretty` printing the</span>
-<span class="sd">    map will typically access (and thus initialise) all elements.</span>
+<div class="viewcode-block" id="DictTMap">
+<a class="viewcode-back" href="../../_autosummary/triangularmap.tmap.DictTMap.html#triangularmap.tmap.DictTMap">[docs]</a>
+<span class="k">class</span> <span class="nc">DictTMap</span><span class="p">(</span><span class="n">TMap</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">default_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a :class:`~TMap` of size ``n`` using a :class:`defaultdict` as underlying storage. Elements will only</span>
+<span class="sd">        be initialised (using the ``default_factory`` function) when accessed. Note that using :meth:`~TMap.pretty`</span>
+<span class="sd">        for printing the map will access (and thus initialise) all elements. Also note that slicing is not supported</span>
+<span class="sd">        (use :class:`~ArrayTMap` or :class:`~TensorTMap` for that).</span>
 
-<span class="sd">    :param n: size of the map</span>
-<span class="sd">    :param default_factory: function to initialise values in the dict/map (passed on to defaultdict as first argument)</span>
-<span class="sd">    :param args: additional arguments passed on the defaultdict</span>
-<span class="sd">    :param kwargs: additional arguments passed on the defaultdict</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="n">default_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">_n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
+
+<span class="sd">        :param n: size of the map</span>
+<span class="sd">        :param default_factory: function to initialise values in the dict/map (passed on to defaultdict as first</span>
+<span class="sd">         argument)</span>
+<span class="sd">        :param args: additional arguments passed on to defaultdict</span>
+<span class="sd">        :param kwargs: additional arguments passed on to defaultdict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">TMap</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="n">default_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">_n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -1,0 +1,11 @@
+triangularmap.tmap.ArrayTMap
+============================
+
+.. currentmodule:: triangularmap.tmap
+
+.. autoclass:: ArrayTMap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+   .. autoclasstoc::

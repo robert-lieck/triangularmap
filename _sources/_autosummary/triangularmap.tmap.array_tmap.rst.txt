@@ -1,6 +1,0 @@
-triangularmap.tmap.array\_tmap
-==============================
-
-.. currentmodule:: triangularmap.tmap
-
-.. autofunction:: array_tmap
