@@ -727,7 +727,10 @@ class TMap:
 
     def pretty(self, cut=None, str_func=None, detach_pytorch=True, scf=None, pos=None, rnd=None,
                align='r', crosses=False, cross_border=True, fill_char=" ", pad_char=" ", top_char=" ", bottom_char=" ",
-               fill_lines=True, haxis=False, daxis=False, laxis=False):
+               fill_lines=True, haxis=False, daxis=False, laxis=False,
+               left_border_char="╱", left_inner_char="╱", right_border_char="╲", right_inner_char="╲",
+               left_border_cross_char="╳", right_border_cross_char="╳", inner_cross_char="╳", top_cross_char="╳",
+               grid_off=False):
         """
         Pretty-print a triangular map. See the gallery for usage examples.
 
@@ -750,6 +753,8 @@ class TMap:
         :param laxis: plot a level axis on the right (not compatible with 'daxis')
         :return: pretty-printed string
         """
+        if grid_off:
+            left_border_char = left_inner_char = right_border_char = right_inner_char = left_border_cross_char = right_border_cross_char = inner_cross_char = top_cross_char = " "
         if daxis and laxis:
             raise ValueError("Only one of 'daxis' and 'laxis' may be true.")
         # if depth axis is used, lines have to be filled
@@ -830,7 +835,7 @@ class TMap:
             depth_indent = fill_char * lines_per_level * (self.n - 1)
             line_indent = fill_char * (lines_per_level - 1)
             pad = depth_indent + line_indent + fill_char * (self.n * (max_lines - 1) + 1)
-            s += pad + "╳"
+            s += pad + top_cross_char
             if fill_lines:
                 s += pad
             # add depth axis label
@@ -862,7 +867,12 @@ class TMap:
                     in_between_cell_spacing = bottom_char * 2 * (lines_per_level + max_lines - line - 2)
                 # add indentation
                 s += depth_indent + line_indent
-                s += ("╱" + within_cell_spacing + "╲" + in_between_cell_spacing) * depth + "╱" + within_cell_spacing + "╲"
+                if depth > 0:
+                    s += left_border_char + within_cell_spacing + right_inner_char + in_between_cell_spacing
+                    s += (left_inner_char + within_cell_spacing + right_inner_char + in_between_cell_spacing) * (depth - 1)
+                    s += left_inner_char + within_cell_spacing + right_border_char
+                else:
+                    s += left_border_char + within_cell_spacing + right_border_char
                 if fill_lines:
                     s += line_indent + depth_indent
                 # add depth axis label
@@ -879,17 +889,17 @@ class TMap:
                     in_between_fill = fill_char * ((max_lines - sub_idx - 1) * 2 - 1)
                     if sub_idx == max_lines - 1:
                         if cross_border:
-                            left_border = "╳"
-                            right_border = "╳"
+                            left_border = left_border_cross_char
+                            right_border = right_border_cross_char
                         else:
-                            left_border = "╱"
-                            right_border = "╲"
-                        s += "\n" + sub_line_indent + depth_indent + left_border + padding + (padding + "╳" + padding).join(sub_slice) + padding + right_border
+                            left_border = left_border_char
+                            right_border = right_border_char
+                        s += "\n" + sub_line_indent + depth_indent + left_border + padding + (padding + inner_cross_char + padding).join(sub_slice) + padding + right_border
                     else:
-                        s += "\n" + sub_line_indent + depth_indent + "╱" + padding + (padding + "╲" + in_between_fill + "╱" + padding).join(sub_slice) + padding + "╲"
+                        s += "\n" + sub_line_indent + depth_indent + left_border_char + padding + (padding + right_inner_char + in_between_fill + left_inner_char + padding).join(sub_slice) + padding + right_border_char
                 else:
                     in_between_fill = fill_char * (max_lines - sub_idx - 1) * 2
-                    s += "\n" + sub_line_indent + depth_indent + "╱" + padding + (padding + "╲" + in_between_fill + "╱" + padding).join(sub_slice) + padding + "╲"
+                    s += "\n" + sub_line_indent + depth_indent + left_border_char + padding + (padding + right_inner_char + in_between_fill + left_inner_char + padding).join(sub_slice) + padding + right_border_char
                 # fill lines
                 if fill_lines:
                     s += depth_indent

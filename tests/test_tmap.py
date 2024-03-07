@@ -410,6 +410,59 @@ class TestTMap(TestCase):
                          '╱ 3.1╲╱ 4.1╲╱ 5.1╲'
             self.assertEqual(pretty_str, tmap.pretty(rnd=dict(decimals=1)))
 
+            tmap = self.get_tmap(2)
+            self.assertEqual(tmap.pretty(left_border_char=" "), """    ╲   \n"""
+                                                                """    0╲  \n"""
+                                                                """  ╲  ╱╲ \n"""
+                                                                """  1╲╱ 2╲""")
+            self.assertEqual(tmap.pretty(right_border_char=" "), """   ╱    \n"""
+                                                                 """  ╱ 0   \n"""
+                                                                 """ ╱╲  ╱  \n"""
+                                                                 """╱ 1╲╱ 2 """)
+            self.assertEqual(tmap.pretty(left_inner_char=" "), """   ╱╲   \n"""
+                                                               """  ╱ 0╲  \n"""
+                                                               """ ╱╲   ╲ \n"""
+                                                               """╱ 1╲  2╲""")
+            self.assertEqual(tmap.pretty(right_inner_char=" "), """   ╱╲   \n"""
+                                                                """  ╱ 0╲  \n"""
+                                                                """ ╱   ╱╲ \n"""
+                                                                """╱ 1 ╱ 2╲""")
+            tmap._arr *= 10
+            self.assertEqual(tmap.pretty(crosses=True, left_border_char=" "), """    ╳    \n"""
+                                                                              """     ╲   \n"""
+                                                                              """  ╳  0╳  \n"""
+                                                                              """   ╲ ╱ ╲ \n"""
+                                                                              """╳ 10╳ 20╳""")
+            self.assertEqual(tmap.pretty(crosses=True, right_border_char=" "), """    ╳    \n"""
+                                                                               """   ╱     \n"""
+                                                                               """  ╳  0╳  \n"""
+                                                                               """ ╱ ╲ ╱   \n"""
+                                                                               """╳ 10╳ 20╳""")
+            self.assertEqual(tmap.pretty(crosses=True, left_inner_char=" "), """    ╳    \n"""
+                                                                             """   ╱ ╲   \n"""
+                                                                             """  ╳  0╳  \n"""
+                                                                             """ ╱ ╲   ╲ \n"""
+                                                                             """╳ 10╳ 20╳""")
+            self.assertEqual(tmap.pretty(crosses=True, right_inner_char=" "), """    ╳    \n"""
+                                                                              """   ╱ ╲   \n"""
+                                                                              """  ╳  0╳  \n"""
+                                                                              """ ╱   ╱ ╲ \n"""
+                                                                              """╳ 10╳ 20╳""")
+            self.assertEqual(tmap.pretty(crosses=True,
+                                         left_border_cross_char="A",
+                                         right_border_cross_char="B",
+                                         inner_cross_char="C",
+                                         top_cross_char="D"), """    D    \n"""
+                                                              """   ╱ ╲   \n"""
+                                                              """  A  0B  \n"""
+                                                              """ ╱ ╲ ╱ ╲ \n"""
+                                                              """A 10C 20B""")
+            self.assertEqual(tmap.pretty(crosses=True, grid_off=True), """         \n"""
+                                                                       """         \n"""
+                                                                       """     0   \n"""
+                                                                       """         \n"""
+                                                                       """  10  20 """)
+
     def test_multiline_print(self):
         # multiline values
         tmap = TMap(np.zeros((3, 3, 3)))
@@ -508,6 +561,7 @@ class TestTMap(TestCase):
                          """aa╱12b╲aaa╱123╲aa\n"""
                          """a╱a34ba╲a╱a456a╲a\n"""
                          """╳aabbbaa╳aa789aa╳""")
+
     def test_get_set_ranges_and_se_slice(self):
         n = 10
         # the first column [0, 1, 3, 6, ...]
