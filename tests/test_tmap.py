@@ -8,7 +8,7 @@ import numpy as np
 from numpy.testing import assert_array_equal
 import torch
 
-from triangularmap.tmap import TMap, array_tmap, tensor_tmap, dict_tmap
+from triangularmap.tmap import TMap, ArrayTMap, TensorTMap, DictTMap
 
 
 # @skip("Disabled to see example coverage")
@@ -765,8 +765,8 @@ class TestTMap(TestCase):
         assert_array_equal(TMap.reindex_from_start_end_to_top_down(seq), [3, 2, 6, 1, 5, 8, 0, 4, 7, 9])
 
     def test_array_and_tensor_tmap(self):
-        for tmap_func, arr_func in [(array_tmap, np.array),
-                                    (tensor_tmap, torch.tensor)]:
+        for tmap_func, arr_func in [(ArrayTMap, np.array),
+                                    (TensorTMap, torch.tensor)]:
             for linearise_blocks in [False, True]:
                 for shape, init_value, mod_value in [
                     (4, 0, 1),  # simple map
@@ -793,7 +793,7 @@ class TestTMap(TestCase):
     def test_dict_tmap(self):
         n = 4
         size = TMap.size_from_n(n)
-        tmap = dict_tmap(n, list)
+        tmap = DictTMap(n, list)
         self.assertEqual(tmap.arr, defaultdict(list))
         tmap[0, 1] = "X"
         tmap[0, 2] = 5

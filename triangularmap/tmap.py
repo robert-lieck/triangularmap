@@ -457,7 +457,7 @@ class TMap:
             copy = tuple(self.arr)
         else:
             copy = deepcopy(self.arr)
-        return TMap(arr=copy, linearise_blocks=self.linearise_blocks)
+        return TMap(arr=copy, linearise_blocks=self.linearise_blocks, _n=self._n)
 
     def top(self, depth=None):
         """
@@ -914,69 +914,68 @@ class TMap:
 
 def _get_size_and_kwargs(n, **kwargs):
     """
-    Get the underlying storage ``size`` from ``n`` (:meth:`~size_from_n`); remove 'linearise_blocks' from ``kwargs``
-    to create ``kwargs1``; if 'linearise_blocks' is in ``kwargs``, put it in ``kwargs2`` instead, otherwise make
-    ``kwargs2`` an empty dict.
+    Get the underlying storage ``size`` from ``n`` (:meth:`~size_from_n`); if ``n`` is a tuple of integers instead of
+    a single integer, only change the first element; see below; remove 'linearise_blocks' from ``kwargs`` to create
+    ``kwargs1``; if 'linearise_blocks' is in ``kwargs``, put it in ``kwargs2`` instead, otherwise make ``kwargs2`` an
+    empty dict.
 
     :return: (``size``, ``kwargs1``, ``kwargs2``)
     """
+    if isinstance(n, tuple):
+        size = (TMap.size_from_n(n[0]),) + n[1:]
+    else:
+        size = (TMap.size_from_n(n),)
     kwargs1 = kwargs
     kwargs2 = {}
     if 'linearise_blocks' in kwargs1:
         kwargs2['linearise_blocks'] = kwargs1['linearise_blocks']
         del kwargs1['linearise_blocks']
-    return TMap.size_from_n(n), kwargs1, kwargs2
+    return size, kwargs1, kwargs2
 
 
-def array_tmap(n, value, *args, **kwargs):
-    """
-    Create a :class:`~TMap` of size ``n`` using a NumPy array initialised with ``value`` as underlying storage. The
-    array is created with ``numpy.full``. The first argument (the shape of the array) is computed via
-    :meth:`~size_from_n` (if ``n`` is a tuple of integers this will also be a tuple with only the first element being
-    changed; see below); the second argument is ``value``; ``*args`` and ``**kwargs`` are passed on (except for
-    ``linearise_blocks``, see below).
+class ArrayTMap(TMap):
+    def __new__(cls, n, value, *args, **kwargs):
+        """
+        Create a :class:`~TMap` of size ``n`` using a NumPy array initialised with ``value`` as underlying storage.
+        The array is created with ``numpy.full``. The first argument (the shape of the array) is computed via
+        :meth:`~size_from_n` (if ``n`` is a tuple of integers this will also be a tuple with only the first element
+        being changed; see below); the second argument is ``value``; ``*args`` and ``**kwargs`` are passed on (except
+        for ``linearise_blocks``, see below).
 
-    :param n: int or tuple of int; if ``n`` is a single integer it specifies the size (width) of the map; if ``n`` is
-     a tuple of integers, the first element specifies the size of the map and the remaining ones specify the shape of
-     the values stored in the map (i.e. :attr:`~TMap.value_shape`).
-    :param value: value to initialise the underlying array with ``numpy.full``
-    :param args: additional arguments passed on to ``numpy.full``
-    :param kwargs: additional arguments passed on to ``numpy.full``; if ``linearise_blocks`` is in ``kwargs`` this
-     will be removed first and instead directly passed on to initialise the :class:`~TMap`.
-    """
-    if isinstance(n, tuple):
-        n_ = n[0]
-        value_shape = n[1:]
-    else:
-        n_ = n
-        value_shape = ()
-    size, kw1, kw2 = _get_size_and_kwargs(n_, **kwargs)
-    return TMap(arr=np.full((size,) + value_shape, value, *args, **kw1), **kw2)
+        :param n: int or tuple of int; if ``n`` is a single integer it specifies the size (width) of the map; if
+         ``n`` is a tuple of integers, the first element specifies the size of the map and the remaining ones specify
+         the shape of the values stored in the map (i.e. :attr:`~TMap.value_shape`).
+        :param value: value to initialise the underlying array with ``numpy.full``
+        :param args: additional arguments passed on to ``numpy.full``
+        :param kwargs: additional arguments passed on to ``numpy.full``; if ``linearise_blocks`` is in ``kwargs`` this
+         will be removed first and instead directly passed on to initialise the :class:`~TMap`.
+        """
+        size, kw1, kw2 = _get_size_and_kwargs(n, **kwargs)
+        return TMap(arr=np.full(size, value, *args, **kw1), **kw2)
 
 
-def tensor_tmap(n, value, *args, **kwargs):
-    """
-    Same as :meth:`~array_tmap` but use a PyTorch tensor (``torch.full``) instead.
-    """
-    if isinstance(n, tuple):
-        n_ = n[0]
-        value_shape = n[1:]
-    else:
-        n_ = n
-        value_shape = ()
-    size, kw1, kw2 = _get_size_and_kwargs(n_, **kwargs)
-    return TMap(arr=torch.full((size,) + value_shape, value, *args, **kw1), **kw2)
+class TensorTMap(TMap):
+    def __new__(cls, n, value, *args, **kwargs):
+        """
+        Same as :meth:`~ArrayTMap` but use a PyTorch tensor (``torch.full``) instead.
+        """
+        size, kw1, kw2 = _get_size_and_kwargs(n, **kwargs)
+        return TMap(arr=torch.full(size, value, *args, **kw1), **kw2)
 
 
-def dict_tmap(n, default_factory, *args, **kwargs):
-    """
-    Create a :class:`~TMap` of size ``n`` using a :class:`defaultdict` as underlying storage. Elements will only be
-    initialised (using the ``default_factory`` function) when accessed. Note that :meth:`~TMap.pretty` printing the
-    map will typically access (and thus initialise) all elements.
+class DictTMap(TMap):
+    def __new__(cls, n, default_factory, *args, **kwargs):
+        """
+        Create a :class:`~TMap` of size ``n`` using a :class:`defaultdict` as underlying storage. Elements will only
+        be initialised (using the ``default_factory`` function) when accessed. Note that using :meth:`~TMap.pretty`
+        for printing the map will access (and thus initialise) all elements. Also note that slicing is not supported
+        (use :class:`~ArrayTMap` or :class:`~TensorTMap` for that).
 
-    :param n: size of the map
-    :param default_factory: function to initialise values in the dict/map (passed on to defaultdict as first argument)
-    :param args: additional arguments passed on the defaultdict
-    :param kwargs: additional arguments passed on the defaultdict
-    """
-    return TMap(arr=defaultdict(default_factory, *args, **kwargs), _n=n)
+
+        :param n: size of the map
+        :param default_factory: function to initialise values in the dict/map (passed on to defaultdict as first
+         argument)
+        :param args: additional arguments passed on to defaultdict
+        :param kwargs: additional arguments passed on to defaultdict
+        """
+        return TMap(arr=defaultdict(default_factory, *args, **kwargs), _n=n)
