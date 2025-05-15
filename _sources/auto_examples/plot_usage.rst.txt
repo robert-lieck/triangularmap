@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_usage.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -416,6 +416,10 @@ is a copy of the underlying storage (likewise for `dslice` and `eslice`).
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_usage.py <plot_usage.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_usage.zip <plot_usage.zip>`
 
 
 .. only:: html

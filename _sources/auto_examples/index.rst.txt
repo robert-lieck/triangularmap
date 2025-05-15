@@ -10,6 +10,7 @@ TriangularMap Gallery
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -44,6 +45,8 @@ TriangularMap Gallery
       <div class="sphx-glr-thumbnail-title">Usage Examples</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

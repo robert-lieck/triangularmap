@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
@@ -6,23 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>triangularmap.tmap.TMap &mdash; triangularmap  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
       <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -97,7 +95,7 @@
 <h1>triangularmap.tmap.TMap<a class="headerlink" href="#triangularmap-tmap-tmap" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">TMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linearise_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">TMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linearise_blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A wrapper around a 1D array that provides access in triangular (or ternary) coordinates. A 1D array of length
 <span class="math">N = n (n + 1) / 2</span> is mapped to a triangular layout as follows (here with <span class="math">N=21</span> and <span class="math">n=6</span>):</p>
@@ -314,21 +312,21 @@ they return a copy, not a view.</p>
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.GetSetWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetSetWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.GetSetWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.GetSetWrapper" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetSetWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.GetSetWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.GetSetWrapper" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Wrapper class that delegates __getitem__ and __setitem__ to custom functions</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.UnDef">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnDef</span></span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.UnDef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.UnDef" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnDef</span></span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.UnDef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.UnDef" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to indicate undefined indices</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.arr">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">arr</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.arr" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">arr</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.arr" title="Link to this definition"></a></dt>
 <dd><p>Underlying storage container.</p>
 </dd></dl>
 
@@ -363,19 +361,19 @@ are called, otherwise a deepcopy of the data is made.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.dslice">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.dslice" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.dslice" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_dslice" title="triangularmap.tmap.TMap.get_dslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_dslice()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_dslice" title="triangularmap.tmap.TMap.set_dslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_dslice()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.eblock">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eblock</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.eblock" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eblock</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.eblock" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_eblock" title="triangularmap.tmap.TMap.get_eblock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_eblock()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_eblock" title="triangularmap.tmap.TMap.set_eblock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_eblock()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.eslice">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.eslice" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.eslice" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_eslice" title="triangularmap.tmap.TMap.get_eslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_eslice()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_eslice" title="triangularmap.tmap.TMap.set_eslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_eslice()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
@@ -447,7 +445,7 @@ a copy, not a view. item can be a tuple to further slice down before retrieving 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_reindex_from_start_end_to_top_down">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_reindex_from_start_end_to_top_down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.get_reindex_from_start_end_to_top_down"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_reindex_from_start_end_to_top_down" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_reindex_from_start_end_to_top_down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.get_reindex_from_start_end_to_top_down"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_reindex_from_start_end_to_top_down" title="Link to this definition"></a></dt>
 <dd><p>For a map of width <code class="docutils literal notranslate"><span class="pre">n</span></code>, get an index array of length <span class="math">n (n + 1)) / 2</span> to reindex from start-end order to
 top-down order. This is used in <code class="xref py py-func docutils literal notranslate"><span class="pre">reindex_from_start_end_to_top_down()</span></code>
 to perform the reindexing.</p>
@@ -463,7 +461,7 @@ to perform the reindexing.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.get_reindex_from_top_down_to_start_end">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_reindex_from_top_down_to_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.get_reindex_from_top_down_to_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_reindex_from_top_down_to_start_end" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_reindex_from_top_down_to_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.get_reindex_from_top_down_to_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.get_reindex_from_top_down_to_start_end" title="Link to this definition"></a></dt>
 <dd><p>For a map of width <code class="docutils literal notranslate"><span class="pre">n</span></code>, get an index array of length <span class="math">n (n + 1)) / 2</span> to reindex from top-down order to
 start-end order. This is used in <code class="xref py py-func docutils literal notranslate"><span class="pre">reindex_from_top_down_to_start_end()</span></code>
 to perform the reindexing.</p>
@@ -548,25 +546,25 @@ Slicing the underlying array as arr[start:end + 1] will return a view of the val
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.linearise_blocks">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">linearise_blocks</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.linearise_blocks" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">linearise_blocks</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.linearise_blocks" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.lslice">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.lslice" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.lslice" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_lslice" title="triangularmap.tmap.TMap.get_lslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_lslice()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_lslice" title="triangularmap.tmap.TMap.set_lslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_lslice()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.n">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.n" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.n" title="Link to this definition"></a></dt>
 <dd><p>Size of the triangular map, i.e., the width at the triangle base. This is not the total size of the
 underlying storage (use <a class="reference internal" href="#triangularmap.tmap.TMap.size_from_n" title="triangularmap.tmap.TMap.size_from_n"><code class="xref py py-meth docutils literal notranslate"><span class="pre">size_from_n()</span></code></a> to convert to that).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.n_from_size">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_from_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.n_from_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.n_from_size" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_from_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.n_from_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.n_from_size" title="Link to this definition"></a></dt>
 <dd><p>Calculate width <code class="docutils literal notranslate"><span class="pre">n</span></code> of the map given the size <cite>N</cite> of the underlying 1D array:
 <span class="math">n = (\sqrt{8 * N + 1} - 1) / 2</span>.
 Checks for valid size (i.e. if the resulting n is actually an integer) and raises a ValueError otherwise.
@@ -615,7 +613,7 @@ This function also works with arrays.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.reindex_from_start_end_to_top_down">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reindex_from_start_end_to_top_down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.reindex_from_start_end_to_top_down"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.reindex_from_start_end_to_top_down" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reindex_from_start_end_to_top_down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.reindex_from_start_end_to_top_down"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.reindex_from_start_end_to_top_down" title="Link to this definition"></a></dt>
 <dd><p>Reindex <code class="docutils literal notranslate"><span class="pre">arr</span></code> from start-end order to top-down order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -656,7 +654,7 @@ triangular map is produced using the lower ordering principle. This is the inver
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.reindex_from_top_down_to_start_end">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reindex_from_top_down_to_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.reindex_from_top_down_to_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.reindex_from_top_down_to_start_end" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reindex_from_top_down_to_start_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.reindex_from_top_down_to_start_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.reindex_from_top_down_to_start_end" title="Link to this definition"></a></dt>
 <dd><p>Reindex <code class="docutils literal notranslate"><span class="pre">arr</span></code> from top-down order to start-end order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -697,7 +695,7 @@ triangular map is produced using the lower ordering principle. This is the inver
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.sblock">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sblock</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.sblock" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sblock</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.sblock" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_sblock" title="triangularmap.tmap.TMap.get_sblock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_sblock()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_sblock" title="triangularmap.tmap.TMap.set_sblock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_sblock()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
@@ -737,7 +735,7 @@ triangular map is produced using the lower ordering principle. This is the inver
 
 <dl class="py method">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.size_from_n">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size_from_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.size_from_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.size_from_n" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size_from_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#TMap.size_from_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.TMap.size_from_n" title="Link to this definition"></a></dt>
 <dd><p>Calculate the size <cite>N</cite> of the underlying 1D array for a given width <code class="docutils literal notranslate"><span class="pre">n</span></code> of the triangular map:
 <span class="math">N = n (n + 1)) / 2</span>. This function also works with arrays.</p>
 <dl class="field-list simple">
@@ -752,7 +750,7 @@ triangular map is produced using the lower ordering principle. This is the inver
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.sslice">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.sslice" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sslice</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.sslice" title="Link to this definition"></a></dt>
 <dd><p>A convenience property that uses <a class="reference internal" href="#triangularmap.tmap.TMap.get_sslice" title="triangularmap.tmap.TMap.get_sslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_sslice()</span></code></a> and <a class="reference internal" href="#triangularmap.tmap.TMap.set_sslice" title="triangularmap.tmap.TMap.set_sslice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_sslice()</span></code></a> as getter and setter, respectively.</p>
 </dd></dl>
 
@@ -773,7 +771,7 @@ TMap shares the same buffer and modification affect both objects.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="triangularmap.tmap.TMap.value_shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value_shape</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.value_shape" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value_shape</span></span><a class="headerlink" href="#triangularmap.tmap.TMap.value_shape" title="Link to this definition"></a></dt>
 <dd><p>Shape of the values stored in the map. If the underlying array has more than one dimension, the first one is
 used for the map and <a class="reference internal" href="#triangularmap.tmap.TMap.value_shape" title="triangularmap.tmap.TMap.value_shape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">value_shape()</span></code></a> corresponds to the remaining dimensions.</p>
 </dd></dl>
