@@ -3,9 +3,29 @@
 import re
 from copy import deepcopy
 from collections import defaultdict
+from importlib import import_module
 
-import torch
-import numpy as np
+
+class DynamicImporter:
+
+    def __init__(self, name):
+        self._name = name
+        self._module = None
+
+    def _assert_import(self):
+        if self._module is None:
+            self._module = import_module(self._name)
+
+    def __getattribute__(self, item):
+        if item in ['_module', '_name', '_assert_import']:
+            return super().__getattribute__(item)
+        else:
+            self._assert_import()
+            return getattr(self._module, item)
+
+
+torch = DynamicImporter('torch')
+np = DynamicImporter('numpy')
 
 
 class TMap:

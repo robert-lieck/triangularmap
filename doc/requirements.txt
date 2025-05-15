@@ -5,3 +5,6 @@ sphinx-autodoc-typehints
 autoclasstoc
 sphinx-gallery
 matplotlib
+
+numpy
+torch

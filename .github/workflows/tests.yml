@@ -29,6 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov coverage
         pip install -r requirements.txt
+        pip install -r tests/requirements.txt
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -38,8 +39,10 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --cov=triangularmap --cov-report=xml --cov-report=html --junitxml=junit/test-results.xml
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         env_vars: OS,PYTHON
         fail_ci_if_error: true
