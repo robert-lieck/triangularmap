@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>triangularmap.tmap &mdash; triangularmap  documentation</title>
+  <title>triangularmap.tmap.DynamicImporter &mdash; triangularmap  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
@@ -24,8 +24,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="triangularmap.tmap.ArrayTMap" href="triangularmap.tmap.ArrayTMap.html" />
-    <link rel="prev" title="triangularmap" href="triangularmap.html" /> 
+    <link rel="next" title="triangularmap.tmap.TMap" href="triangularmap.tmap.TMap.html" />
+    <link rel="prev" title="triangularmap.tmap.DictTMap" href="triangularmap.tmap.DictTMap.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,10 +52,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">TriangularMap Gallery</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_summary.html">API Summary</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="triangularmap.html">triangularmap</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">triangularmap.tmap</a><ul>
+<li class="toctree-l3 current"><a class="reference internal" href="triangularmap.tmap.html">triangularmap.tmap</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.ArrayTMap.html">triangularmap.tmap.ArrayTMap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.DictTMap.html">triangularmap.tmap.DictTMap</a></li>
-<li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.DynamicImporter.html">triangularmap.tmap.DynamicImporter</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">triangularmap.tmap.DynamicImporter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.TMap.html">triangularmap.tmap.TMap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="triangularmap.tmap.TensorTMap.html">triangularmap.tmap.TensorTMap</a></li>
 </ul>
@@ -82,7 +82,8 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api_summary.html">API Summary</a></li>
           <li class="breadcrumb-item"><a href="triangularmap.html">triangularmap</a></li>
-      <li class="breadcrumb-item active">triangularmap.tmap</li>
+          <li class="breadcrumb-item"><a href="triangularmap.tmap.html">triangularmap.tmap</a></li>
+      <li class="breadcrumb-item active">triangularmap.tmap.DynamicImporter</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -91,36 +92,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-triangularmap.tmap">
-<span id="triangularmap-tmap"></span><h1>triangularmap.tmap<a class="headerlink" href="#module-triangularmap.tmap" title="Link to this heading"></a></h1>
-<p class="rubric">Classes</p>
+  <section id="triangularmap-tmap-dynamicimporter">
+<h1>triangularmap.tmap.DynamicImporter<a class="headerlink" href="#triangularmap-tmap-dynamicimporter" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triangularmap.tmap.DynamicImporter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">triangularmap.tmap.</span></span><span class="sig-name descname"><span class="pre">DynamicImporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/triangularmap/tmap.html#DynamicImporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#triangularmap.tmap.DynamicImporter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Public Methods:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.ArrayTMap.html#triangularmap.tmap.ArrayTMap" title="triangularmap.tmap.ArrayTMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayTMap</span></code></a>(n, value, *args, **kwargs)</p></td>
-<td><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a NumPy array initialised with <code class="docutils literal notranslate"><span class="pre">value</span></code> as underlying storage.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.DictTMap.html#triangularmap.tmap.DictTMap" title="triangularmap.tmap.DictTMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DictTMap</span></code></a>(n, default_factory, *args, **kwargs)</p></td>
-<td><p>Create a <a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMap</span></code></a> of size <code class="docutils literal notranslate"><span class="pre">n</span></code> using a <code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code> as underlying storage.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.DynamicImporter.html#triangularmap.tmap.DynamicImporter" title="triangularmap.tmap.DynamicImporter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DynamicImporter</span></code></a>(name)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code>(name)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="triangularmap.tmap.TMap.html#triangularmap.tmap.TMap" title="triangularmap.tmap.TMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TMap</span></code></a>(arr[, linearise_blocks, _n])</p></td>
-<td><p>A wrapper around a 1D array that provides access in triangular (or ternary) coordinates.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="triangularmap.tmap.TensorTMap.html#triangularmap.tmap.TensorTMap" title="triangularmap.tmap.TensorTMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorTMap</span></code></a>(n, value, *args, **kwargs)</p></td>
-<td><p>Same as <a class="reference internal" href="triangularmap.tmap.ArrayTMap.html#triangularmap.tmap.ArrayTMap" title="triangularmap.tmap.ArrayTMap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ArrayTMap()</span></code></a> but use a PyTorch tensor (<code class="docutils literal notranslate"><span class="pre">torch.full</span></code>) instead.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getattribute__</span></code>(item)</p></td>
+<td><p>Return getattr(self, name).</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="autoclasstoc docutils container">
+<p class="rubric">Private Methods:</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_assert_import</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triangularmap.html" class="btn btn-neutral float-left" title="triangularmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triangularmap.tmap.ArrayTMap.html" class="btn btn-neutral float-right" title="triangularmap.tmap.ArrayTMap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triangularmap.tmap.DictTMap.html" class="btn btn-neutral float-left" title="triangularmap.tmap.DictTMap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triangularmap.tmap.TMap.html" class="btn btn-neutral float-right" title="triangularmap.tmap.TMap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

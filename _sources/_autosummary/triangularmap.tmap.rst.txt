@@ -21,6 +21,7 @@ triangularmap.tmap
    
       ArrayTMap
       DictTMap
+      DynamicImporter
       TMap
       TensorTMap
    

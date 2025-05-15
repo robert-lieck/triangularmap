@@ -1,0 +1,11 @@
+triangularmap.tmap.DynamicImporter
+==================================
+
+.. currentmodule:: triangularmap.tmap
+
+.. autoclass:: DynamicImporter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+   .. autoclasstoc::
